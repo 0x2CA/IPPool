@@ -1,7 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var IPData = /** @class */ (function () {
-    function IPData(type) {
+    function IPData(ip, port, type, anonymous, site, survive, checkTime) {
+        this.ip = ip;
+        this.port = port;
+        this.type = type;
+        this.anonymous = anonymous;
+        this.site = site;
+        this.survive = survive;
+        this.checkTime = checkTime;
     }
     return IPData;
 }());

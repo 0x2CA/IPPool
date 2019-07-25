@@ -54,7 +54,7 @@ var XiciDailiPool = /** @class */ (function (_super) {
                 port = info[1];
             }
             if (info[2]) {
-                site = info[1];
+                site = info[2];
             }
             if (info[3]) {
                 anonymous = info[3] == "高匿";
@@ -69,8 +69,8 @@ var XiciDailiPool = /** @class */ (function (_super) {
                 checkTime = info[6];
             }
             if (info.length == 7 && parseInt(port) > 0) {
-                var ipdData = new IPData_1.default(type);
-                console.log(info);
+                var ipdData = new IPData_1.default(ip, port, type, anonymous, site, survive, checkTime);
+                result.push(ipdData);
             }
         });
         return result;
