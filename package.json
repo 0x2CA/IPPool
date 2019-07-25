@@ -11,6 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/node": "^12.6.8"
+    "@types/cheerio": "^0.22.12",
+    "@types/node": "^12.6.8",
+    "@types/superagent": "^4.1.3",
+    "cheerio": "^1.0.0-rc.3",
+    "superagent": "^5.1.0"
   }
 }

@@ -38,35 +38,44 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var XiciDailiPool_1 = __importDefault(require("./Pool/XiciDailiPool"));
-var FreePool_1 = __importDefault(require("./Pool/FreePool"));
-//https://www.kuaidaili.com/free/inha/页数
-//http://www.ip3366.net/free/?stype=1&page=页数
-//https://www.xicidaili.com/nn/页数
-var Application = /** @class */ (function () {
-    function Application() {
+var cheerio = require("cheerio");
+var RequestStatic_1 = __importDefault(require("../RequestStatic"));
+var PoolBase = /** @class */ (function () {
+    function PoolBase() {
+        this.page = 1;
     }
-    Application.Main = function () {
-        var argv = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            argv[_i] = arguments[_i];
-        }
+    PoolBase.prototype.setPage = function (page) {
+        this.page = page;
+    };
+    PoolBase.prototype.getPage = function () {
+        return this.page;
+    };
+    PoolBase.prototype.nextPage = function () {
+        this.page++;
+    };
+    PoolBase.prototype.prePage = function () {
+        this.page--;
+    };
+    /**
+     * 获取数据
+     *
+     * @returns
+     * @memberof PoolBase
+     */
+    PoolBase.prototype.getData = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, _b;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
-                    case 0:
-                        _b = (_a = console).log;
-                        return [4 /*yield*/, FreePool_1.default.getPool(XiciDailiPool_1.default).getData()];
+            var html;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, RequestStatic_1.default.get(this.getUrl())];
                     case 1:
-                        _b.apply(_a, [_c.sent()]);
-                        return [2 /*return*/];
+                        html = (_a.sent()).text;
+                        return [2 /*return*/, this.getPoolData(cheerio.load(html))];
                 }
             });
         });
     };
-    return Application;
+    return PoolBase;
 }());
-exports.default = Application;
-Application.Main.apply(Application, process.argv.slice(2));
-//# sourceMappingURL=Application.js.map
+exports.default = PoolBase;
+//# sourceMappingURL=PoolBase.js.map
