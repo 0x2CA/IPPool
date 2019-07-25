@@ -17,6 +17,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var PoolBase_1 = __importDefault(require("./PoolBase"));
+var IPData_1 = __importDefault(require("./IPData"));
 var XiciDailiPool = /** @class */ (function (_super) {
     __extends(XiciDailiPool, _super);
     function XiciDailiPool() {
@@ -30,18 +31,49 @@ var XiciDailiPool = /** @class */ (function (_super) {
         $("table#ip_list tbody tr").each(function (index, element) {
             var info = $(element)
                 .text()
-                .replace(/(  |\n| |\n      )*/, ",")
-                .split(",")
+                .split(" ")
+                .filter(function (value) {
+                return value != "";
+            })
+                .join("")
+                .split("\n")
                 .filter(function (value) {
                 return value != "";
             });
-            // let type = info.search(/HTTPS/) >= 0 ? IPData.Type.HTTPS : IPData.Type.HTTP;
-            console.log(JSON.stringify(info));
-            // try {
-            // 	let ip = new RegExp(/[^	]([0-9]{1,4}|.){7}/).exec(info)[0];
-            // } catch (error) {}
+            var ip = "";
+            var port = "";
+            var anonymous = false;
+            var checkTime = "";
+            var survive = "";
+            var site = "";
+            var type = IPData_1.default.Type.HTTP;
+            if (info[0]) {
+                ip = info[0];
+            }
+            if (info[1]) {
+                port = info[1];
+            }
+            if (info[2]) {
+                site = info[1];
+            }
+            if (info[3]) {
+                anonymous = info[3] == "高匿";
+            }
+            if (info[4]) {
+                type = info[4] == "HTTPS" ? IPData_1.default.Type.HTTPS : IPData_1.default.Type.HTTP;
+            }
+            if (info[5]) {
+                survive = info[5];
+            }
+            if (info[6]) {
+                checkTime = info[6];
+            }
+            if (info.length == 7 && parseInt(port) > 0) {
+                var ipdData = new IPData_1.default(type);
+                console.log(info);
+            }
         });
-        return [];
+        return result;
     };
     return XiciDailiPool;
 }(PoolBase_1.default));

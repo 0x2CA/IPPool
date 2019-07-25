@@ -11,17 +11,57 @@ export default class XiciDailiPool extends PoolBase {
 		$("table#ip_list tbody tr").each((index, element) => {
 			let info = $(element)
 				.text()
-				.replace(/(  |\n| |\n      )*/, ",")
-				.split(",")
+				.split(" ")
+				.filter((value) => {
+					return value != "";
+				})
+				.join("")
+				.split("\n")
 				.filter((value) => {
 					return value != "";
 				});
-			// let type = info.search(/HTTPS/) >= 0 ? IPData.Type.HTTPS : IPData.Type.HTTP;
-			console.log(JSON.stringify(info));
-			// try {
-			// 	let ip = new RegExp(/[^	]([0-9]{1,4}|.){7}/).exec(info)[0];
-			// } catch (error) {}
+
+			let ip = "";
+			let port = "";
+			let anonymous = false;
+			let checkTime = "";
+			let survive = "";
+			let site = "";
+			let type: IPData.Type = IPData.Type.HTTP;
+
+			if (info[0]) {
+				ip = info[0];
+			}
+
+			if (info[1]) {
+				port = info[1];
+			}
+
+			if (info[2]) {
+				site = info[1];
+			}
+
+			if (info[3]) {
+				anonymous = info[3] == "高匿";
+			}
+
+			if (info[4]) {
+				type = info[4] == "HTTPS" ? IPData.Type.HTTPS : IPData.Type.HTTP;
+			}
+
+			if (info[5]) {
+				survive = info[5];
+			}
+
+			if (info[6]) {
+				checkTime = info[6];
+			}
+
+			if (info.length == 7 && parseInt(port) > 0) {
+				let ipdData = new IPData(type);
+				console.log(info);
+			}
 		});
-		return [];
+		return result;
 	}
 }
