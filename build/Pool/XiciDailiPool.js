@@ -23,6 +23,9 @@ var XiciDailiPool = /** @class */ (function (_super) {
     function XiciDailiPool() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    XiciDailiPool.prototype.getCharset = function () {
+        return PoolBase_1.default.CharsetType.UFT8;
+    };
     XiciDailiPool.prototype.getAgreement = function () {
         return PoolBase_1.default.AgreementType.HTTPS;
     };

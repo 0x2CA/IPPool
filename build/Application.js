@@ -39,7 +39,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var FreePool_1 = __importDefault(require("./Pool/FreePool"));
-var IPData_1 = __importDefault(require("./Pool/IPData"));
 var Ip3366Pool_1 = __importDefault(require("./Pool/Ip3366Pool"));
 //https://www.kuaidaili.com/free/inha/页数
 var Application = /** @class */ (function () {
@@ -51,7 +50,7 @@ var Application = /** @class */ (function () {
             argv[_i] = arguments[_i];
         }
         return __awaiter(this, void 0, void 0, function () {
-            var pool, list, index, ip;
+            var pool, list, index, ipData;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, FreePool_1.default.getPool(Ip3366Pool_1.default)];
@@ -62,8 +61,8 @@ var Application = /** @class */ (function () {
                     case 2:
                         list = _a.sent();
                         for (index = 0; index < list.length; index++) {
-                            ip = list[index];
-                            console.log(IPData_1.default.AgreementType[ip.agreement], ip.ip, ip.port);
+                            ipData = list[index];
+                            console.log(ipData.site, ipData.ip, ipData.port);
                         }
                         return [2 /*return*/];
                 }

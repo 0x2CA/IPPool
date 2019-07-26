@@ -68,7 +68,7 @@ var IPData = /** @class */ (function () {
                         result = "";
                         proxy = IPData.AgreementType.HTTP + this.ip + ":" + this.port;
                         agreement = this.getAgreement();
-                        return [4 /*yield*/, RequestStatic_1.default.get(agreement + this.testUrl, proxy, 3000)];
+                        return [4 /*yield*/, RequestStatic_1.default.get(agreement + this.testUrl, "utf8", proxy, 3000)];
                     case 1:
                         _a.sent();
                         this.isSurvive = true;
@@ -85,14 +85,11 @@ var IPData = /** @class */ (function () {
     return IPData;
 }());
 (function (IPData) {
-    var AgreementType = /** @class */ (function () {
-        function AgreementType() {
-        }
-        AgreementType.HTTP = "http://";
-        AgreementType.HTTPS = "https://";
-        return AgreementType;
-    }());
-    IPData.AgreementType = AgreementType;
+    var AgreementType;
+    (function (AgreementType) {
+        AgreementType["HTTP"] = "http://";
+        AgreementType["HTTPS"] = "https://";
+    })(AgreementType = IPData.AgreementType || (IPData.AgreementType = {}));
 })(IPData || (IPData = {}));
 exports.default = IPData;
 //# sourceMappingURL=IPData.js.map

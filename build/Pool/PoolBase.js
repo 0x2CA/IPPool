@@ -72,7 +72,7 @@ var PoolBase = /** @class */ (function () {
                         _a.trys.push([0, 5, , 6]);
                         list = void 0;
                         if (!!this.data[this.page]) return [3 /*break*/, 2];
-                        return [4 /*yield*/, RequestStatic_1.default.get(this.getAgreement() + this.getUrl())];
+                        return [4 /*yield*/, RequestStatic_1.default.get(this.getAgreement() + this.getUrl(), this.getCharset())];
                     case 1:
                         html = _a.sent();
                         list = this.getIPData(cheerio.load(html));
@@ -106,14 +106,16 @@ var PoolBase = /** @class */ (function () {
     return PoolBase;
 }());
 (function (PoolBase) {
-    var AgreementType = /** @class */ (function () {
-        function AgreementType() {
-        }
-        AgreementType.HTTP = "http://";
-        AgreementType.HTTPS = "https://";
-        return AgreementType;
-    }());
-    PoolBase.AgreementType = AgreementType;
+    var AgreementType;
+    (function (AgreementType) {
+        AgreementType["HTTP"] = "http://";
+        AgreementType["HTTPS"] = "https://";
+    })(AgreementType = PoolBase.AgreementType || (PoolBase.AgreementType = {}));
+    var CharsetType;
+    (function (CharsetType) {
+        CharsetType["UFT8"] = "utf8";
+        CharsetType["GB2312"] = "gb2312";
+    })(CharsetType = PoolBase.CharsetType || (PoolBase.CharsetType = {}));
 })(PoolBase || (PoolBase = {}));
 exports.default = PoolBase;
 //# sourceMappingURL=PoolBase.js.map

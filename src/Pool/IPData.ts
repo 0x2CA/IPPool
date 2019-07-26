@@ -33,7 +33,7 @@ class IPData {
 			let result = "";
 			let proxy = IPData.AgreementType.HTTP + this.ip + ":" + this.port;
 			let agreement = this.getAgreement();
-			await RequestStatic.get(agreement + this.testUrl, proxy, 3000);
+			await RequestStatic.get(agreement + this.testUrl, "utf8", proxy, 3000);
 			this.isSurvive = true;
 			this.checkTime = new Date();
 		} catch (error) {

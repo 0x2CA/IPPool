@@ -2,6 +2,10 @@ import PoolBase from "./PoolBase";
 import IPData from "./IPData";
 
 export default class XiciDailiPool extends PoolBase {
+	protected getCharset(): PoolBase.CharsetType {
+		return PoolBase.CharsetType.UFT8;
+	}
+
 	getAgreement(): PoolBase.AgreementType {
 		return PoolBase.AgreementType.HTTPS;
 	}

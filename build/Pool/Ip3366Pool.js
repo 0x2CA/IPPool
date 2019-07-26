@@ -23,6 +23,9 @@ var Ip3366Pool = /** @class */ (function (_super) {
     function Ip3366Pool() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    Ip3366Pool.prototype.getCharset = function () {
+        return PoolBase_1.default.CharsetType.GB2312;
+    };
     Ip3366Pool.prototype.getAgreement = function () {
         return PoolBase_1.default.AgreementType.HTTP;
     };
@@ -43,6 +46,7 @@ var Ip3366Pool = /** @class */ (function (_super) {
                 .filter(function (value) {
                 return value != "";
             });
+            console.log(info);
             var ip = "";
             var port = "";
             var anonymous = false;

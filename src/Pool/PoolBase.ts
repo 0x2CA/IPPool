@@ -29,7 +29,10 @@ abstract class PoolBase {
 		try {
 			let list: Array<IPData>;
 			if (!this.data[this.page]) {
-				let html = await RequestStatic.get(this.getAgreement() + this.getUrl());
+				let html = await RequestStatic.get(
+					this.getAgreement() + this.getUrl(),
+					this.getCharset()
+				);
 				list = this.getIPData(cheerio.load(html));
 			} else {
 				list = this.data[this.page];
@@ -83,12 +86,18 @@ abstract class PoolBase {
 	 * @memberof PoolBase
 	 */
 	protected abstract getIPData($: CheerioStatic): Array<IPData>;
+
+	protected abstract getCharset(): PoolBase.CharsetType;
 }
 
 namespace PoolBase {
 	export enum AgreementType {
 		HTTP = "http://",
 		HTTPS = "https://",
+	}
+	export enum CharsetType {
+		UFT8 = "utf8",
+		GB2312 = "gb2312",
 	}
 }
 

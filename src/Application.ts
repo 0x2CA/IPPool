@@ -11,8 +11,8 @@ export default class Application {
 		pool.setPage(1);
 		let list = await pool.getPageData();
 		for (let index = 0; index < list.length; index++) {
-			let ip = list[index];
-			console.log(ip.agreement, ip.ip, ip.port);
+			let ipData = list[index];
+			console.log(ipData.site, ipData.ip, ipData.port);
 		}
 	}
 }

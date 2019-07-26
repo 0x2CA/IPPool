@@ -2,6 +2,10 @@ import PoolBase from "./PoolBase";
 import IPData from "./IPData";
 
 export default class Ip3366Pool extends PoolBase {
+	protected getCharset(): PoolBase.CharsetType {
+		return PoolBase.CharsetType.GB2312;
+	}
+
 	getAgreement(): PoolBase.AgreementType {
 		return PoolBase.AgreementType.HTTP;
 	}
@@ -25,6 +29,8 @@ export default class Ip3366Pool extends PoolBase {
 					return value != "";
 				});
 
+			console.log(info);
+
 			let ip = "";
 			let port = "";
 			let anonymous = false;
@@ -42,7 +48,7 @@ export default class Ip3366Pool extends PoolBase {
 			}
 
 			if (info[2]) {
-				anonymous =  info[2] == "高匿代理IP";
+				anonymous = info[2] == "高匿代理IP";
 			}
 
 			if (info[3]) {
@@ -62,8 +68,7 @@ export default class Ip3366Pool extends PoolBase {
 			}
 
 			if (info.length == 7) {
-                let ipdData = new IPData(ip, port, type, anonymous, site);
-                console.log(ip, port, type, anonymous, site);
+				let ipdData = new IPData(ip, port, type, anonymous, site);
 				result.push(ipdData);
 			}
 		});
