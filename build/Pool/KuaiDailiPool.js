@@ -18,21 +18,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var PoolBase_1 = __importDefault(require("./PoolBase"));
 var IPData_1 = __importDefault(require("./IPData"));
-var XiciDailiPool = /** @class */ (function (_super) {
-    __extends(XiciDailiPool, _super);
-    function XiciDailiPool() {
+var KuaiDailiPool = /** @class */ (function (_super) {
+    __extends(KuaiDailiPool, _super);
+    function KuaiDailiPool() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    XiciDailiPool.prototype.getCharset = function () {
+    KuaiDailiPool.prototype.getCharset = function () {
         return PoolBase_1.default.CharsetType.UFT8;
     };
-    XiciDailiPool.prototype.getAgreement = function () {
+    KuaiDailiPool.prototype.getAgreement = function () {
         return PoolBase_1.default.AgreementType.HTTPS;
     };
-    XiciDailiPool.prototype.getUrl = function () {
-        return "www.xicidaili.com/nn/" + this.page;
+    KuaiDailiPool.prototype.getUrl = function () {
+        return "www.kuaidaili.com/free/inha/" + this.page;
     };
-    XiciDailiPool.prototype.getIPData = function ($) {
+    KuaiDailiPool.prototype.getIPData = function ($) {
         var result = new Array();
         var list = this.parseHtml($);
         for (var index = 0; index < list.length; index++) {
@@ -51,13 +51,13 @@ var XiciDailiPool = /** @class */ (function (_super) {
                 port = info[1];
             }
             if (info[2]) {
-                site = info[2];
+                anonymous = info[2] == "高匿名";
             }
             if (info[3]) {
-                anonymous = info[3] == "高匿";
+                type = info[3] == "HTTPS" ? IPData_1.default.AgreementType.HTTPS : IPData_1.default.AgreementType.HTTP;
             }
             if (info[4]) {
-                type = info[4] == "HTTPS" ? IPData_1.default.AgreementType.HTTPS : IPData_1.default.AgreementType.HTTP;
+                site = info[4];
             }
             if (info[5]) {
                 survive = info[5];
@@ -72,7 +72,7 @@ var XiciDailiPool = /** @class */ (function (_super) {
         }
         return result;
     };
-    return XiciDailiPool;
+    return KuaiDailiPool;
 }(PoolBase_1.default));
-exports.default = XiciDailiPool;
-//# sourceMappingURL=XiciDailiPool.js.map
+exports.default = KuaiDailiPool;
+//# sourceMappingURL=KuaiDailiPool.js.map

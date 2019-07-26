@@ -103,6 +103,32 @@ var PoolBase = /** @class */ (function () {
             });
         });
     };
+    /**
+     * 默认方式解析html
+     *
+     * @protected
+     * @param {CheerioStatic} $
+     * @returns
+     * @memberof PoolBase
+     */
+    PoolBase.prototype.parseHtml = function ($) {
+        var result = new Array();
+        $("table tbody tr").each(function (index, element) {
+            var info = $(element)
+                .text()
+                .split(" ")
+                .filter(function (value) {
+                return value != "";
+            })
+                .join("")
+                .split("\n")
+                .filter(function (value) {
+                return value != "";
+            });
+            result.push(info);
+        });
+        return result;
+    };
     return PoolBase;
 }());
 (function (PoolBase) {
@@ -113,7 +139,7 @@ var PoolBase = /** @class */ (function () {
     })(AgreementType = PoolBase.AgreementType || (PoolBase.AgreementType = {}));
     var CharsetType;
     (function (CharsetType) {
-        CharsetType["UFT8"] = "utf8";
+        CharsetType["UFT8"] = "utf-8";
         CharsetType["GB2312"] = "gb2312";
     })(CharsetType = PoolBase.CharsetType || (PoolBase.CharsetType = {}));
 })(PoolBase || (PoolBase = {}));

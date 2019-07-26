@@ -38,9 +38,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var XiciDailiPool_1 = __importDefault(require("./Pool/XiciDailiPool"));
 var FreePool_1 = __importDefault(require("./Pool/FreePool"));
-var Ip3366Pool_1 = __importDefault(require("./Pool/Ip3366Pool"));
-//https://www.kuaidaili.com/free/inha/页数
 var Application = /** @class */ (function () {
     function Application() {
     }
@@ -53,7 +52,7 @@ var Application = /** @class */ (function () {
             var pool, list, index, ipData;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, FreePool_1.default.getPool(Ip3366Pool_1.default)];
+                    case 0: return [4 /*yield*/, FreePool_1.default.getPool(XiciDailiPool_1.default)];
                     case 1:
                         pool = _a.sent();
                         pool.setPage(1);
@@ -62,7 +61,7 @@ var Application = /** @class */ (function () {
                         list = _a.sent();
                         for (index = 0; index < list.length; index++) {
                             ipData = list[index];
-                            console.log(ipData.site, ipData.ip, ipData.port);
+                            console.log(ipData.agreement, ipData.ip, ipData.port);
                         }
                         return [2 /*return*/];
                 }

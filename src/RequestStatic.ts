@@ -7,21 +7,22 @@ export default class RequestStatic {
 		return new Promise((resolve, reject) => {
 			let request = superagent.get(url);
 
-			request = (<any>request).charset(charset);
+			request.buffer(true);
+
+			(<any>request).charset(charset);
 
 			if (proxy) {
-				request = (<any>request).proxy(proxy);
+				(<any>request).proxy(proxy);
 			}
 
 			if (timeout) {
-				request = request.timeout(timeout);
+				request.timeout(timeout);
 			}
 
 			request.end(function(err, res) {
 				if (!err) {
 					resolve(res.text);
 				} else {
-					console.error(url, proxy, timeout, err);
 					reject(err);
 				}
 			});

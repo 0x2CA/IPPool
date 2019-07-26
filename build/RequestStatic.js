@@ -10,19 +10,19 @@ var RequestStatic = /** @class */ (function () {
         if (charset === void 0) { charset = "utf8"; }
         return new Promise(function (resolve, reject) {
             var request = superagent.get(url);
-            request = request.charset(charset);
+            request.buffer(true);
+            request.charset(charset);
             if (proxy) {
-                request = request.proxy(proxy);
+                request.proxy(proxy);
             }
             if (timeout) {
-                request = request.timeout(timeout);
+                request.timeout(timeout);
             }
             request.end(function (err, res) {
                 if (!err) {
                     resolve(res.text);
                 }
                 else {
-                    console.error(url, proxy, timeout, err);
                     reject(err);
                 }
             });

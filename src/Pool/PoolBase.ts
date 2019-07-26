@@ -60,6 +60,34 @@ abstract class PoolBase {
 	}
 
 	/**
+	 * 默认方式解析html
+	 *
+	 * @protected
+	 * @param {CheerioStatic} $
+	 * @returns
+	 * @memberof PoolBase
+	 */
+	protected parseHtml($: CheerioStatic) {
+		let result = new Array<Array<string>>();
+		$("table tbody tr").each((index, element) => {
+			let info = $(element)
+				.text()
+				.split(" ")
+				.filter((value) => {
+					return value != "";
+				})
+				.join("")
+				.split("\n")
+				.filter((value) => {
+					return value != "";
+				});
+
+			result.push(info);
+		});
+		return result;
+	}
+
+	/**
 	 * 获取协议
 	 *
 	 * @abstract
@@ -96,7 +124,7 @@ namespace PoolBase {
 		HTTPS = "https://",
 	}
 	export enum CharsetType {
-		UFT8 = "utf8",
+		UFT8 = "utf-8",
 		GB2312 = "gb2312",
 	}
 }

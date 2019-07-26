@@ -1,7 +1,7 @@
 import PoolBase from "./PoolBase";
 import IPData from "./IPData";
 
-export default class XiciDailiPool extends PoolBase {
+export default class KuaiDailiPool extends PoolBase {
 	protected getCharset(): PoolBase.CharsetType {
 		return PoolBase.CharsetType.UFT8;
 	}
@@ -11,7 +11,7 @@ export default class XiciDailiPool extends PoolBase {
 	}
 
 	getUrl(): string {
-		return `www.xicidaili.com/nn/${this.page}`;
+		return `www.kuaidaili.com/free/inha/${this.page}`;
 	}
 
 	getIPData($: CheerioStatic): Array<IPData> {
@@ -20,7 +20,6 @@ export default class XiciDailiPool extends PoolBase {
 		let list = this.parseHtml($);
 		for (let index = 0; index < list.length; index++) {
 			const info = list[index];
-
 			let ip = "";
 			let port = "";
 			let anonymous = false;
@@ -38,15 +37,15 @@ export default class XiciDailiPool extends PoolBase {
 			}
 
 			if (info[2]) {
-				site = info[2];
+				anonymous = info[2] == "高匿名";
 			}
 
 			if (info[3]) {
-				anonymous = info[3] == "高匿";
+				type = info[3] == "HTTPS" ? IPData.AgreementType.HTTPS : IPData.AgreementType.HTTP;
 			}
 
 			if (info[4]) {
-				type = info[4] == "HTTPS" ? IPData.AgreementType.HTTPS : IPData.AgreementType.HTTP;
+				site = info[4];
 			}
 
 			if (info[5]) {
@@ -62,6 +61,7 @@ export default class XiciDailiPool extends PoolBase {
 				result.push(ipdData);
 			}
 		}
+
 		return result;
 	}
 }

@@ -34,19 +34,9 @@ var Ip3366Pool = /** @class */ (function (_super) {
     };
     Ip3366Pool.prototype.getIPData = function ($) {
         var result = new Array();
-        $("table tbody tr").each(function (index, element) {
-            var info = $(element)
-                .text()
-                .split(" ")
-                .filter(function (value) {
-                return value != "";
-            })
-                .join("")
-                .split("\n")
-                .filter(function (value) {
-                return value != "";
-            });
-            console.log(info);
+        var list = this.parseHtml($);
+        for (var index = 0; index < list.length; index++) {
+            var info = list[index];
             var ip = "";
             var port = "";
             var anonymous = false;
@@ -79,7 +69,7 @@ var Ip3366Pool = /** @class */ (function (_super) {
                 var ipdData = new IPData_1.default(ip, port, type, anonymous, site);
                 result.push(ipdData);
             }
-        });
+        }
         return result;
     };
     return Ip3366Pool;

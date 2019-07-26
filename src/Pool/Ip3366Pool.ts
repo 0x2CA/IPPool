@@ -16,21 +16,11 @@ export default class Ip3366Pool extends PoolBase {
 
 	getIPData($: CheerioStatic): Array<IPData> {
 		let result = new Array<IPData>();
-		$("table tbody tr").each((index, element) => {
-			let info = $(element)
-				.text()
-				.split(" ")
-				.filter((value) => {
-					return value != "";
-				})
-				.join("")
-				.split("\n")
-				.filter((value) => {
-					return value != "";
-				});
 
-			console.log(info);
-
+		let list = this.parseHtml($);
+		for (let index = 0; index < list.length; index++) {
+            const info = list[index];
+            
 			let ip = "";
 			let port = "";
 			let anonymous = false;
@@ -71,7 +61,7 @@ export default class Ip3366Pool extends PoolBase {
 				let ipdData = new IPData(ip, port, type, anonymous, site);
 				result.push(ipdData);
 			}
-		});
+		}
 		return result;
 	}
 }
