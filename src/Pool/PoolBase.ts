@@ -23,8 +23,27 @@ export default abstract class PoolBase {
 	 * @memberof PoolBase
 	 */
 	async getData() {
-		let html = (await RequestStatic.get(this.getUrl())).text;
-		return this.getPoolData(cheerio.load(html));
+		try {
+			let html = await RequestStatic.get(this.getUrl());
+			let list = this.getPoolData(cheerio.load(html));
+			let promiseList = new Array<Promise<void>>();
+			for (let index = 0; index < list.length; index++) {
+				promiseList.push(list[index].check());
+			}
+
+			await Promise.all(promiseList);
+
+			let result = list.filter((value) => {
+				return value.isSurvive;
+			});
+
+			console.log("可用率", result.length / list.length);
+			return result;
+		} catch (error) {
+			console.error(error);
+			console.log("可用率", 0);
+			return [];
+		}
 	}
 	/**
 	 * 获取URL

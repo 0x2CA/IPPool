@@ -64,13 +64,33 @@ var PoolBase = /** @class */ (function () {
      */
     PoolBase.prototype.getData = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var html;
+            var html, list, promiseList, index, result, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, RequestStatic_1.default.get(this.getUrl())];
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, RequestStatic_1.default.get(this.getUrl())];
                     case 1:
-                        html = (_a.sent()).text;
-                        return [2 /*return*/, this.getPoolData(cheerio.load(html))];
+                        html = _a.sent();
+                        list = this.getPoolData(cheerio.load(html));
+                        promiseList = new Array();
+                        for (index = 0; index < list.length; index++) {
+                            promiseList.push(list[index].check());
+                        }
+                        return [4 /*yield*/, Promise.all(promiseList)];
+                    case 2:
+                        _a.sent();
+                        result = list.filter(function (value) {
+                            return value.isSurvive;
+                        });
+                        console.log("可用率", result.length / list.length);
+                        return [2 /*return*/, result];
+                    case 3:
+                        error_1 = _a.sent();
+                        console.error(error_1);
+                        console.log("可用率", 0);
+                        return [2 /*return*/, []];
+                    case 4: return [2 /*return*/];
                 }
             });
         });

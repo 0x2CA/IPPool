@@ -16,10 +16,9 @@ var RequestStatic = /** @class */ (function () {
             }
             request.end(function (err, res) {
                 if (!err) {
-                    resolve(res);
+                    resolve(res.text);
                 }
                 else {
-                    console.error(err);
                     reject(err);
                 }
             });

@@ -7,7 +7,9 @@ import FreePool from "./Pool/FreePool";
 
 export default class Application {
 	static async Main(...argv: Array<string>) {
-		console.log(await FreePool.getPool(XiciDailiPool).getData());
+		let pool = await FreePool.getPool(XiciDailiPool);
+		pool.setPage(1);
+		console.log(await pool.getData());
 	}
 }
 

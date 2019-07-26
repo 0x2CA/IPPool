@@ -1,3 +1,5 @@
+import RequestStatic from "../RequestStatic";
+
 class IPData {
 	ip: string = "";
 	port: string = "";
@@ -6,6 +8,7 @@ class IPData {
 	site: string = "";
 	checkTime: Date = new Date();
 	isSurvive = false;
+	private testUrl = "www.baidu.com";
 
 	constructor(ip: string, port: string, type: IPData.Type, anonymous: boolean, site: string) {
 		this.ip = ip;
@@ -13,13 +16,27 @@ class IPData {
 		this.type = type;
 		this.anonymous = anonymous;
 		this.site = site;
-		this.check();
 	}
 
-	check() {
-        
-		this.isSurvive = true;
-		this.checkTime = new Date();
+	getAgreement() {
+		if (this.type == IPData.Type.HTTP) {
+			return "http://";
+		} else {
+			return "https://";
+		}
+	}
+
+	async check() {
+		try {
+			let result = "";
+			let proxy = this.ip + ":" + this.port;
+			let agreement = this.getAgreement();
+			await RequestStatic.get(agreement + this.testUrl, agreement + proxy, 3000);
+			this.isSurvive = true;
+			this.checkTime = new Date();
+		} catch (error) {
+			// console.error(error);
+		}
 	}
 }
 

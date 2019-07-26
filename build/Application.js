@@ -52,13 +52,16 @@ var Application = /** @class */ (function () {
             argv[_i] = arguments[_i];
         }
         return __awaiter(this, void 0, void 0, function () {
-            var _a, _b;
+            var pool, _a, _b;
             return __generator(this, function (_c) {
                 switch (_c.label) {
-                    case 0:
-                        _b = (_a = console).log;
-                        return [4 /*yield*/, FreePool_1.default.getPool(XiciDailiPool_1.default).getData()];
+                    case 0: return [4 /*yield*/, FreePool_1.default.getPool(XiciDailiPool_1.default)];
                     case 1:
+                        pool = _c.sent();
+                        pool.setPage(1);
+                        _b = (_a = console).log;
+                        return [4 /*yield*/, pool.getData()];
+                    case 2:
                         _b.apply(_a, [_c.sent()]);
                         return [2 /*return*/];
                 }
