@@ -1,15 +1,20 @@
 import XiciDailiPool from "./Pool/XiciDailiPool";
 import FreePool from "./Pool/FreePool";
+import IPData from "./Pool/IPData";
+import Ip3366Pool from "./Pool/Ip3366Pool";
 
 //https://www.kuaidaili.com/free/inha/页数
-//http://www.ip3366.net/free/?stype=1&page=页数
-//https://www.xicidaili.com/nn/页数
+
 
 export default class Application {
 	static async Main(...argv: Array<string>) {
-		let pool = await FreePool.getPool(XiciDailiPool);
+		let pool = await FreePool.getPool(Ip3366Pool);
 		pool.setPage(1);
-		console.log(await pool.getData());
+		let list = await pool.getPageData();
+		for (let index = 0; index < list.length; index++) {
+			const ip = list[index];
+			console.log(IPData.Type[ip.type], ip.ip, ip.port);
+		}
 	}
 }
 

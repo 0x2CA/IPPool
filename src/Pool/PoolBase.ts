@@ -2,8 +2,10 @@ import cheerio = require("cheerio");
 import RequestStatic from "../RequestStatic";
 import IPData from "./IPData";
 
-export default abstract class PoolBase {
+abstract class PoolBase {
 	protected page = 1;
+	private data: Array<Array<IPData>> = new Array<Array<IPData>>();
+
 	setPage(page: number) {
 		this.page = page;
 	}
@@ -16,17 +18,25 @@ export default abstract class PoolBase {
 	prePage() {
 		this.page--;
 	}
+
 	/**
-	 * 获取数据
+	 * 获取当前页数据
 	 *
 	 * @returns
 	 * @memberof PoolBase
 	 */
-	async getData() {
+	async getPageData() {
 		try {
-			let html = await RequestStatic.get(this.getUrl());
-			let list = this.getPoolData(cheerio.load(html));
+			let list: Array<IPData>;
+			if (!this.data[this.page]) {
+				let html = await RequestStatic.get(this.getAgreement() + this.getUrl());
+				list = this.getPoolData(cheerio.load(html));
+			} else {
+				list = this.data[this.page];
+			}
+
 			let promiseList = new Array<Promise<void>>();
+
 			for (let index = 0; index < list.length; index++) {
 				promiseList.push(list[index].check());
 			}
@@ -45,6 +55,16 @@ export default abstract class PoolBase {
 			return [];
 		}
 	}
+
+	/**
+	 * 获取协议
+	 *
+	 * @abstract
+	 * @returns {PoolBase.Type}
+	 * @memberof PoolBase
+	 */
+	abstract getAgreement(): PoolBase.Type;
+
 	/**
 	 * 获取URL
 	 *
@@ -64,3 +84,12 @@ export default abstract class PoolBase {
 	 */
 	protected abstract getPoolData($: CheerioStatic): Array<IPData>;
 }
+
+namespace PoolBase {
+	export class Type {
+		static HTTP = "http://";
+		static HTTPS = "https://";
+	}
+}
+
+export default PoolBase;

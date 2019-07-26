@@ -1,13 +1,13 @@
 import PoolBase from "./PoolBase";
 import IPData from "./IPData";
 
-export default class XiciDailiPool extends PoolBase {
+export default class Ip3366Pool extends PoolBase {
 	getAgreement(): PoolBase.Type {
-		return PoolBase.Type.HTTPS;
+		return PoolBase.Type.HTTP;
 	}
 
 	getUrl(): string {
-		return `www.xicidaili.com/nn/${this.page}`;
+		return `www.ip3366.net/free/?stype=1&page=${this.page}`;
 	}
 
 	getPoolData($: CheerioStatic): Array<IPData> {

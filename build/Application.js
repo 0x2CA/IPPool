@@ -38,11 +38,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var XiciDailiPool_1 = __importDefault(require("./Pool/XiciDailiPool"));
 var FreePool_1 = __importDefault(require("./Pool/FreePool"));
+var IPData_1 = __importDefault(require("./Pool/IPData"));
+var Ip3366Pool_1 = __importDefault(require("./Pool/Ip3366Pool"));
 //https://www.kuaidaili.com/free/inha/页数
-//http://www.ip3366.net/free/?stype=1&page=页数
-//https://www.xicidaili.com/nn/页数
 var Application = /** @class */ (function () {
     function Application() {
     }
@@ -52,17 +51,20 @@ var Application = /** @class */ (function () {
             argv[_i] = arguments[_i];
         }
         return __awaiter(this, void 0, void 0, function () {
-            var pool, _a, _b;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
-                    case 0: return [4 /*yield*/, FreePool_1.default.getPool(XiciDailiPool_1.default)];
+            var pool, list, index, ip;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, FreePool_1.default.getPool(Ip3366Pool_1.default)];
                     case 1:
-                        pool = _c.sent();
+                        pool = _a.sent();
                         pool.setPage(1);
-                        _b = (_a = console).log;
-                        return [4 /*yield*/, pool.getData()];
+                        return [4 /*yield*/, pool.getPageData()];
                     case 2:
-                        _b.apply(_a, [_c.sent()]);
+                        list = _a.sent();
+                        for (index = 0; index < list.length; index++) {
+                            ip = list[index];
+                            console.log(IPData_1.default.Type[ip.type], ip.ip, ip.port);
+                        }
                         return [2 /*return*/];
                 }
             });

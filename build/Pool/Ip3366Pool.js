@@ -18,18 +18,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var PoolBase_1 = __importDefault(require("./PoolBase"));
 var IPData_1 = __importDefault(require("./IPData"));
-var XiciDailiPool = /** @class */ (function (_super) {
-    __extends(XiciDailiPool, _super);
-    function XiciDailiPool() {
+var Ip3366Pool = /** @class */ (function (_super) {
+    __extends(Ip3366Pool, _super);
+    function Ip3366Pool() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    XiciDailiPool.prototype.getAgreement = function () {
-        return PoolBase_1.default.Type.HTTPS;
+    Ip3366Pool.prototype.getAgreement = function () {
+        return PoolBase_1.default.Type.HTTP;
     };
-    XiciDailiPool.prototype.getUrl = function () {
-        return "www.xicidaili.com/nn/" + this.page;
+    Ip3366Pool.prototype.getUrl = function () {
+        return "www.ip3366.net/free/?stype=1&page=" + this.page;
     };
-    XiciDailiPool.prototype.getPoolData = function ($) {
+    Ip3366Pool.prototype.getPoolData = function ($) {
         var result = new Array();
         $("table tbody tr").each(function (index, element) {
             var info = $(element)
@@ -78,7 +78,7 @@ var XiciDailiPool = /** @class */ (function (_super) {
         });
         return result;
     };
-    return XiciDailiPool;
+    return Ip3366Pool;
 }(PoolBase_1.default));
-exports.default = XiciDailiPool;
-//# sourceMappingURL=XiciDailiPool.js.map
+exports.default = Ip3366Pool;
+//# sourceMappingURL=Ip3366Pool.js.map

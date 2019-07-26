@@ -43,6 +43,7 @@ var RequestStatic_1 = __importDefault(require("../RequestStatic"));
 var PoolBase = /** @class */ (function () {
     function PoolBase() {
         this.page = 1;
+        this.data = new Array();
     }
     PoolBase.prototype.setPage = function (page) {
         this.page = page;
@@ -57,45 +58,62 @@ var PoolBase = /** @class */ (function () {
         this.page--;
     };
     /**
-     * 获取数据
+     * 获取当前页数据
      *
      * @returns
      * @memberof PoolBase
      */
-    PoolBase.prototype.getData = function () {
+    PoolBase.prototype.getPageData = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var html, list, promiseList, index, result, error_1;
+            var list, html, promiseList, index, result, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        return [4 /*yield*/, RequestStatic_1.default.get(this.getUrl())];
+                        _a.trys.push([0, 5, , 6]);
+                        list = void 0;
+                        if (!!this.data[this.page]) return [3 /*break*/, 2];
+                        return [4 /*yield*/, RequestStatic_1.default.get(this.getAgreement() + this.getUrl())];
                     case 1:
                         html = _a.sent();
                         list = this.getPoolData(cheerio.load(html));
+                        return [3 /*break*/, 3];
+                    case 2:
+                        list = this.data[this.page];
+                        _a.label = 3;
+                    case 3:
                         promiseList = new Array();
                         for (index = 0; index < list.length; index++) {
                             promiseList.push(list[index].check());
                         }
                         return [4 /*yield*/, Promise.all(promiseList)];
-                    case 2:
+                    case 4:
                         _a.sent();
                         result = list.filter(function (value) {
                             return value.isSurvive;
                         });
                         console.log("可用率", result.length / list.length);
                         return [2 /*return*/, result];
-                    case 3:
+                    case 5:
                         error_1 = _a.sent();
                         console.error(error_1);
                         console.log("可用率", 0);
                         return [2 /*return*/, []];
-                    case 4: return [2 /*return*/];
+                    case 6: return [2 /*return*/];
                 }
             });
         });
     };
     return PoolBase;
 }());
+(function (PoolBase) {
+    var Type = /** @class */ (function () {
+        function Type() {
+        }
+        Type.HTTP = "http://";
+        Type.HTTPS = "https://";
+        return Type;
+    }());
+    PoolBase.Type = Type;
+})(PoolBase || (PoolBase = {}));
 exports.default = PoolBase;
 //# sourceMappingURL=PoolBase.js.map
