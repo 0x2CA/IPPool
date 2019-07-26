@@ -29,7 +29,7 @@ var Ip3366Pool = /** @class */ (function (_super) {
     Ip3366Pool.prototype.getUrl = function () {
         return "www.ip3366.net/free/?stype=1&page=" + this.page;
     };
-    Ip3366Pool.prototype.getPoolData = function ($) {
+    Ip3366Pool.prototype.getIPData = function ($) {
         var result = new Array();
         $("table tbody tr").each(function (index, element) {
             var info = $(element)
@@ -57,13 +57,13 @@ var Ip3366Pool = /** @class */ (function (_super) {
                 port = info[1];
             }
             if (info[2]) {
-                site = info[2];
+                anonymous = info[2] == "高匿代理IP";
             }
             if (info[3]) {
-                anonymous = info[3] == "高匿";
+                type = info[3] == "HTTPS" ? IPData_1.default.Type.HTTPS : IPData_1.default.Type.HTTP;
             }
             if (info[4]) {
-                type = info[4] == "HTTPS" ? IPData_1.default.Type.HTTPS : IPData_1.default.Type.HTTP;
+                site = info[4];
             }
             if (info[5]) {
                 survive = info[5];

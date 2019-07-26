@@ -18,6 +18,7 @@ export default class RequestStatic {
 				if (!err) {
 					resolve(res.text);
 				} else {
+					console.error(url, proxy, timeout, err);
 					reject(err);
 				}
 			});

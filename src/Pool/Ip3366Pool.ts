@@ -10,7 +10,7 @@ export default class Ip3366Pool extends PoolBase {
 		return `www.ip3366.net/free/?stype=1&page=${this.page}`;
 	}
 
-	getPoolData($: CheerioStatic): Array<IPData> {
+	getIPData($: CheerioStatic): Array<IPData> {
 		let result = new Array<IPData>();
 		$("table tbody tr").each((index, element) => {
 			let info = $(element)
@@ -42,15 +42,15 @@ export default class Ip3366Pool extends PoolBase {
 			}
 
 			if (info[2]) {
-				site = info[2];
+				anonymous = info[2] == "高匿代理IP";
 			}
 
 			if (info[3]) {
-				anonymous = info[3] == "高匿";
+				type = info[3] == "HTTPS" ? IPData.Type.HTTPS : IPData.Type.HTTP;
 			}
 
 			if (info[4]) {
-				type = info[4] == "HTTPS" ? IPData.Type.HTTPS : IPData.Type.HTTP;
+				site = info[4];
 			}
 
 			if (info[5]) {

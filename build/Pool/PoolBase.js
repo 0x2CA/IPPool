@@ -75,7 +75,7 @@ var PoolBase = /** @class */ (function () {
                         return [4 /*yield*/, RequestStatic_1.default.get(this.getAgreement() + this.getUrl())];
                     case 1:
                         html = _a.sent();
-                        list = this.getPoolData(cheerio.load(html));
+                        list = this.getIPData(cheerio.load(html));
                         return [3 /*break*/, 3];
                     case 2:
                         list = this.data[this.page];

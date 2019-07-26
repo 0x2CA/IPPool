@@ -19,6 +19,7 @@ var RequestStatic = /** @class */ (function () {
                     resolve(res.text);
                 }
                 else {
+                    console.error(url, proxy, timeout, err);
                     reject(err);
                 }
             });

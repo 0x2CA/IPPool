@@ -30,7 +30,7 @@ abstract class PoolBase {
 			let list: Array<IPData>;
 			if (!this.data[this.page]) {
 				let html = await RequestStatic.get(this.getAgreement() + this.getUrl());
-				list = this.getPoolData(cheerio.load(html));
+				list = this.getIPData(cheerio.load(html));
 			} else {
 				list = this.data[this.page];
 			}
@@ -82,7 +82,7 @@ abstract class PoolBase {
 	 * @returns {Array<PoolData>}
 	 * @memberof PoolBase
 	 */
-	protected abstract getPoolData($: CheerioStatic): Array<IPData>;
+	protected abstract getIPData($: CheerioStatic): Array<IPData>;
 }
 
 namespace PoolBase {
