@@ -2,15 +2,15 @@ import PoolBase from "./PoolBase";
 import IPData from "./IPData";
 
 export default class XiciDailiPool extends PoolBase {
-	getAgreement(): PoolBase.Type {
-		return PoolBase.Type.HTTPS;
+	getAgreement(): PoolBase.AgreementType {
+		return PoolBase.AgreementType.HTTPS;
 	}
 
 	getUrl(): string {
 		return `www.xicidaili.com/nn/${this.page}`;
 	}
 
-	getPoolData($: CheerioStatic): Array<IPData> {
+	getIPData($: CheerioStatic): Array<IPData> {
 		let result = new Array<IPData>();
 		$("table tbody tr").each((index, element) => {
 			let info = $(element)
@@ -31,7 +31,7 @@ export default class XiciDailiPool extends PoolBase {
 			let checkTime = "";
 			let survive = "";
 			let site = "";
-			let type: IPData.Type = IPData.Type.HTTP;
+			let type: IPData.AgreementType = IPData.AgreementType.HTTP;
 
 			if (info[0]) {
 				ip = info[0];
@@ -50,7 +50,7 @@ export default class XiciDailiPool extends PoolBase {
 			}
 
 			if (info[4]) {
-				type = info[4] == "HTTPS" ? IPData.Type.HTTPS : IPData.Type.HTTP;
+				type = info[4] == "HTTPS" ? IPData.AgreementType.HTTPS : IPData.AgreementType.HTTP;
 			}
 
 			if (info[5]) {

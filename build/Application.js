@@ -63,7 +63,7 @@ var Application = /** @class */ (function () {
                         list = _a.sent();
                         for (index = 0; index < list.length; index++) {
                             ip = list[index];
-                            console.log(IPData_1.default.Type[ip.type], ip.ip, ip.port);
+                            console.log(IPData_1.default.AgreementType[ip.agreement], ip.ip, ip.port);
                         }
                         return [2 /*return*/];
                 }

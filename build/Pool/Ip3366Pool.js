@@ -24,7 +24,7 @@ var Ip3366Pool = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Ip3366Pool.prototype.getAgreement = function () {
-        return PoolBase_1.default.Type.HTTP;
+        return PoolBase_1.default.AgreementType.HTTP;
     };
     Ip3366Pool.prototype.getUrl = function () {
         return "www.ip3366.net/free/?stype=1&page=" + this.page;
@@ -49,7 +49,7 @@ var Ip3366Pool = /** @class */ (function (_super) {
             var checkTime = "";
             var survive = "";
             var site = "";
-            var type = IPData_1.default.Type.HTTP;
+            var type = IPData_1.default.AgreementType.HTTP;
             if (info[0]) {
                 ip = info[0];
             }
@@ -60,7 +60,7 @@ var Ip3366Pool = /** @class */ (function (_super) {
                 anonymous = info[2] == "高匿代理IP";
             }
             if (info[3]) {
-                type = info[3] == "HTTPS" ? IPData_1.default.Type.HTTPS : IPData_1.default.Type.HTTP;
+                type = info[3] == "HTTPS" ? IPData_1.default.AgreementType.HTTPS : IPData_1.default.AgreementType.HTTP;
             }
             if (info[4]) {
                 site = info[4];

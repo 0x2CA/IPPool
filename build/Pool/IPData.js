@@ -40,10 +40,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var RequestStatic_1 = __importDefault(require("../RequestStatic"));
 var IPData = /** @class */ (function () {
-    function IPData(ip, port, type, anonymous, site) {
+    function IPData(ip, port, agreement, anonymous, site) {
         this.ip = "";
         this.port = "";
-        this.type = IPData.Type.HTTP;
+        this.agreement = IPData.AgreementType.HTTP;
         this.anonymous = false;
         this.site = "";
         this.checkTime = new Date();
@@ -51,17 +51,12 @@ var IPData = /** @class */ (function () {
         this.testUrl = "www.baidu.com";
         this.ip = ip;
         this.port = port;
-        this.type = type;
+        this.agreement = agreement;
         this.anonymous = anonymous;
         this.site = site;
     }
     IPData.prototype.getAgreement = function () {
-        if (this.type == IPData.Type.HTTP) {
-            return "http://";
-        }
-        else {
-            return "https://";
-        }
+        return this.agreement;
     };
     IPData.prototype.check = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -71,9 +66,9 @@ var IPData = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
                         result = "";
-                        proxy = this.ip + ":" + this.port;
+                        proxy = IPData.AgreementType.HTTP + this.ip + ":" + this.port;
                         agreement = this.getAgreement();
-                        return [4 /*yield*/, RequestStatic_1.default.get(agreement + this.testUrl, agreement + proxy, 3000)];
+                        return [4 /*yield*/, RequestStatic_1.default.get(agreement + this.testUrl, proxy, 3000)];
                     case 1:
                         _a.sent();
                         this.isSurvive = true;
@@ -90,11 +85,14 @@ var IPData = /** @class */ (function () {
     return IPData;
 }());
 (function (IPData) {
-    var Type;
-    (function (Type) {
-        Type[Type["HTTP"] = 0] = "HTTP";
-        Type[Type["HTTPS"] = 1] = "HTTPS";
-    })(Type = IPData.Type || (IPData.Type = {}));
+    var AgreementType = /** @class */ (function () {
+        function AgreementType() {
+        }
+        AgreementType.HTTP = "http://";
+        AgreementType.HTTPS = "https://";
+        return AgreementType;
+    }());
+    IPData.AgreementType = AgreementType;
 })(IPData || (IPData = {}));
 exports.default = IPData;
 //# sourceMappingURL=IPData.js.map

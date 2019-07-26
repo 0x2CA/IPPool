@@ -24,12 +24,12 @@ var XiciDailiPool = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     XiciDailiPool.prototype.getAgreement = function () {
-        return PoolBase_1.default.Type.HTTPS;
+        return PoolBase_1.default.AgreementType.HTTPS;
     };
     XiciDailiPool.prototype.getUrl = function () {
         return "www.xicidaili.com/nn/" + this.page;
     };
-    XiciDailiPool.prototype.getPoolData = function ($) {
+    XiciDailiPool.prototype.getIPData = function ($) {
         var result = new Array();
         $("table tbody tr").each(function (index, element) {
             var info = $(element)
@@ -49,7 +49,7 @@ var XiciDailiPool = /** @class */ (function (_super) {
             var checkTime = "";
             var survive = "";
             var site = "";
-            var type = IPData_1.default.Type.HTTP;
+            var type = IPData_1.default.AgreementType.HTTP;
             if (info[0]) {
                 ip = info[0];
             }
@@ -63,7 +63,7 @@ var XiciDailiPool = /** @class */ (function (_super) {
                 anonymous = info[3] == "高匿";
             }
             if (info[4]) {
-                type = info[4] == "HTTPS" ? IPData_1.default.Type.HTTPS : IPData_1.default.Type.HTTP;
+                type = info[4] == "HTTPS" ? IPData_1.default.AgreementType.HTTPS : IPData_1.default.AgreementType.HTTP;
             }
             if (info[5]) {
                 survive = info[5];

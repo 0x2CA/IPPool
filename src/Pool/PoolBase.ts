@@ -60,10 +60,10 @@ abstract class PoolBase {
 	 * 获取协议
 	 *
 	 * @abstract
-	 * @returns {PoolBase.Type}
+	 * @returns {PoolBase.AgreementType}
 	 * @memberof PoolBase
 	 */
-	abstract getAgreement(): PoolBase.Type;
+	abstract getAgreement(): PoolBase.AgreementType;
 
 	/**
 	 * 获取URL
@@ -86,9 +86,9 @@ abstract class PoolBase {
 }
 
 namespace PoolBase {
-	export class Type {
-		static HTTP = "http://";
-		static HTTPS = "https://";
+	export enum AgreementType {
+		HTTP = "http://",
+		HTTPS = "https://",
 	}
 }
 

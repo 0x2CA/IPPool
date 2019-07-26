@@ -106,14 +106,14 @@ var PoolBase = /** @class */ (function () {
     return PoolBase;
 }());
 (function (PoolBase) {
-    var Type = /** @class */ (function () {
-        function Type() {
+    var AgreementType = /** @class */ (function () {
+        function AgreementType() {
         }
-        Type.HTTP = "http://";
-        Type.HTTPS = "https://";
-        return Type;
+        AgreementType.HTTP = "http://";
+        AgreementType.HTTPS = "https://";
+        return AgreementType;
     }());
-    PoolBase.Type = Type;
+    PoolBase.AgreementType = AgreementType;
 })(PoolBase || (PoolBase = {}));
 exports.default = PoolBase;
 //# sourceMappingURL=PoolBase.js.map

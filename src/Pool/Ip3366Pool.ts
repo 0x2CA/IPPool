@@ -2,8 +2,8 @@ import PoolBase from "./PoolBase";
 import IPData from "./IPData";
 
 export default class Ip3366Pool extends PoolBase {
-	getAgreement(): PoolBase.Type {
-		return PoolBase.Type.HTTP;
+	getAgreement(): PoolBase.AgreementType {
+		return PoolBase.AgreementType.HTTP;
 	}
 
 	getUrl(): string {
@@ -31,7 +31,7 @@ export default class Ip3366Pool extends PoolBase {
 			let checkTime = "";
 			let survive = "";
 			let site = "";
-			let type: IPData.Type = IPData.Type.HTTP;
+			let type: IPData.AgreementType = IPData.AgreementType.HTTP;
 
 			if (info[0]) {
 				ip = info[0];
@@ -42,11 +42,11 @@ export default class Ip3366Pool extends PoolBase {
 			}
 
 			if (info[2]) {
-				anonymous = info[2] == "高匿代理IP";
+				anonymous =  info[2] == "高匿代理IP";
 			}
 
 			if (info[3]) {
-				type = info[3] == "HTTPS" ? IPData.Type.HTTPS : IPData.Type.HTTP;
+				type = info[3] == "HTTPS" ? IPData.AgreementType.HTTPS : IPData.AgreementType.HTTP;
 			}
 
 			if (info[4]) {
@@ -62,7 +62,8 @@ export default class Ip3366Pool extends PoolBase {
 			}
 
 			if (info.length == 7) {
-				let ipdData = new IPData(ip, port, type, anonymous, site);
+                let ipdData = new IPData(ip, port, type, anonymous, site);
+                console.log(ip, port, type, anonymous, site);
 				result.push(ipdData);
 			}
 		});
