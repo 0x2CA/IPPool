@@ -23,54 +23,42 @@ var XiciDailiPool = /** @class */ (function (_super) {
     function XiciDailiPool() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    XiciDailiPool.prototype.getCharset = function () {
-        return PoolBase_1.default.CharsetType.UFT8;
-    };
     XiciDailiPool.prototype.getAgreement = function () {
         return PoolBase_1.default.AgreementType.HTTPS;
     };
     XiciDailiPool.prototype.getUrl = function () {
         return "www.xicidaili.com/nn/" + this.page;
     };
-    XiciDailiPool.prototype.getIPData = function ($) {
-        var result = new Array();
-        var list = this.parseHtml($);
-        for (var index = 0; index < list.length; index++) {
-            var info = list[index];
-            var ip = "";
-            var port = "";
-            var anonymous = false;
-            var checkTime = "";
-            var survive = "";
-            var site = "";
-            var type = IPData_1.default.AgreementType.HTTP;
-            if (info[0]) {
-                ip = info[0];
-            }
-            if (info[1]) {
-                port = info[1];
-            }
-            if (info[2]) {
-                site = info[2];
-            }
-            if (info[3]) {
-                anonymous = info[3] == "高匿";
-            }
-            if (info[4]) {
-                type = info[4] == "HTTPS" ? IPData_1.default.AgreementType.HTTPS : IPData_1.default.AgreementType.HTTP;
-            }
-            if (info[5]) {
-                survive = info[5];
-            }
-            if (info[6]) {
-                checkTime = info[6];
-            }
-            if (info.length == 7) {
-                var ipdData = new IPData_1.default(ip, port, type, anonymous, site);
-                result.push(ipdData);
-            }
+    XiciDailiPool.prototype.getIPData = function (info) {
+        var ip = "";
+        var port = "";
+        var anonymous = false;
+        var checkTime = "";
+        var survive = "";
+        var site = "";
+        var type = IPData_1.default.AgreementType.HTTP;
+        if (info[0]) {
+            ip = info[0];
         }
-        return result;
+        if (info[1]) {
+            port = info[1];
+        }
+        if (info[2]) {
+            site = info[2];
+        }
+        if (info[3]) {
+            anonymous = info[3] == "高匿";
+        }
+        if (info[4]) {
+            type = info[4] == "HTTPS" ? IPData_1.default.AgreementType.HTTPS : IPData_1.default.AgreementType.HTTP;
+        }
+        if (info[5]) {
+            survive = info[5];
+        }
+        if (info[6]) {
+            checkTime = info[6];
+        }
+        return new IPData_1.default(ip, port, type, anonymous, site);
     };
     return XiciDailiPool;
 }(PoolBase_1.default));

@@ -27,13 +27,18 @@ abstract class PoolBase {
 	 */
 	async getPageData() {
 		try {
-			let list: Array<IPData>;
+			let list: Array<IPData> = new Array<IPData>();
 			if (!this.data[this.page]) {
 				let html = await RequestStatic.get(
 					this.getAgreement() + this.getUrl(),
 					this.getCharset()
 				);
-				list = this.getIPData(cheerio.load(html));
+				let infoList = this.parseHtml(cheerio.load(html));
+
+				for (let index = 0; index < infoList.length; index++) {
+					const info = infoList[index];
+					list.push(this.getIPData(info));
+				}
 			} else {
 				list = this.data[this.page];
 			}
@@ -106,16 +111,19 @@ abstract class PoolBase {
 	abstract getUrl(): string;
 
 	/**
-	 * 获取当前URL的Ip池数据
+	 *转换为Ip对象
 	 *
+	 * @protected
 	 * @abstract
-	 * @param {CheerioStatic} $
-	 * @returns {Array<PoolData>}
+	 * @param {Array<string>} info
+	 * @returns {IPData}
 	 * @memberof PoolBase
 	 */
-	protected abstract getIPData($: CheerioStatic): Array<IPData>;
+	protected abstract getIPData(info: Array<string>): IPData;
 
-	protected abstract getCharset(): PoolBase.CharsetType;
+	protected getCharset(): PoolBase.CharsetType {
+		return PoolBase.CharsetType.UFT8;
+	}
 }
 
 namespace PoolBase {

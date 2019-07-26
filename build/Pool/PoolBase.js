@@ -65,17 +65,21 @@ var PoolBase = /** @class */ (function () {
      */
     PoolBase.prototype.getPageData = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var list, html, promiseList, index, result, error_1;
+            var list, html, infoList, index, info, promiseList, index, result, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 5, , 6]);
-                        list = void 0;
+                        list = new Array();
                         if (!!this.data[this.page]) return [3 /*break*/, 2];
                         return [4 /*yield*/, RequestStatic_1.default.get(this.getAgreement() + this.getUrl(), this.getCharset())];
                     case 1:
                         html = _a.sent();
-                        list = this.getIPData(cheerio.load(html));
+                        infoList = this.parseHtml(cheerio.load(html));
+                        for (index = 0; index < infoList.length; index++) {
+                            info = infoList[index];
+                            list.push(this.getIPData(info));
+                        }
                         return [3 /*break*/, 3];
                     case 2:
                         list = this.data[this.page];
@@ -128,6 +132,9 @@ var PoolBase = /** @class */ (function () {
             result.push(info);
         });
         return result;
+    };
+    PoolBase.prototype.getCharset = function () {
+        return PoolBase.CharsetType.UFT8;
     };
     return PoolBase;
 }());

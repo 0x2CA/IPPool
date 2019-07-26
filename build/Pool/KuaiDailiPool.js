@@ -23,54 +23,42 @@ var KuaiDailiPool = /** @class */ (function (_super) {
     function KuaiDailiPool() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    KuaiDailiPool.prototype.getCharset = function () {
-        return PoolBase_1.default.CharsetType.UFT8;
-    };
     KuaiDailiPool.prototype.getAgreement = function () {
         return PoolBase_1.default.AgreementType.HTTPS;
     };
     KuaiDailiPool.prototype.getUrl = function () {
         return "www.kuaidaili.com/free/inha/" + this.page;
     };
-    KuaiDailiPool.prototype.getIPData = function ($) {
-        var result = new Array();
-        var list = this.parseHtml($);
-        for (var index = 0; index < list.length; index++) {
-            var info = list[index];
-            var ip = "";
-            var port = "";
-            var anonymous = false;
-            var checkTime = "";
-            var survive = "";
-            var site = "";
-            var type = IPData_1.default.AgreementType.HTTP;
-            if (info[0]) {
-                ip = info[0];
-            }
-            if (info[1]) {
-                port = info[1];
-            }
-            if (info[2]) {
-                anonymous = info[2] == "高匿名";
-            }
-            if (info[3]) {
-                type = info[3] == "HTTPS" ? IPData_1.default.AgreementType.HTTPS : IPData_1.default.AgreementType.HTTP;
-            }
-            if (info[4]) {
-                site = info[4];
-            }
-            if (info[5]) {
-                survive = info[5];
-            }
-            if (info[6]) {
-                checkTime = info[6];
-            }
-            if (info.length == 7) {
-                var ipdData = new IPData_1.default(ip, port, type, anonymous, site);
-                result.push(ipdData);
-            }
+    KuaiDailiPool.prototype.getIPData = function (info) {
+        var ip = "";
+        var port = "";
+        var anonymous = false;
+        var checkTime = "";
+        var survive = "";
+        var site = "";
+        var type = IPData_1.default.AgreementType.HTTP;
+        if (info[0]) {
+            ip = info[0];
         }
-        return result;
+        if (info[1]) {
+            port = info[1];
+        }
+        if (info[2]) {
+            anonymous = info[2] == "高匿名";
+        }
+        if (info[3]) {
+            type = info[3] == "HTTPS" ? IPData_1.default.AgreementType.HTTPS : IPData_1.default.AgreementType.HTTP;
+        }
+        if (info[4]) {
+            site = info[4];
+        }
+        if (info[5]) {
+            survive = info[5];
+        }
+        if (info[6]) {
+            checkTime = info[6];
+        }
+        return new IPData_1.default(ip, port, type, anonymous, site);
     };
     return KuaiDailiPool;
 }(PoolBase_1.default));

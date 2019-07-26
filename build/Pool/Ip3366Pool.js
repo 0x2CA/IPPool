@@ -32,45 +32,36 @@ var Ip3366Pool = /** @class */ (function (_super) {
     Ip3366Pool.prototype.getUrl = function () {
         return "www.ip3366.net/free/?stype=1&page=" + this.page;
     };
-    Ip3366Pool.prototype.getIPData = function ($) {
-        var result = new Array();
-        var list = this.parseHtml($);
-        for (var index = 0; index < list.length; index++) {
-            var info = list[index];
-            var ip = "";
-            var port = "";
-            var anonymous = false;
-            var checkTime = "";
-            var survive = "";
-            var site = "";
-            var type = IPData_1.default.AgreementType.HTTP;
-            if (info[0]) {
-                ip = info[0];
-            }
-            if (info[1]) {
-                port = info[1];
-            }
-            if (info[2]) {
-                anonymous = info[2] == "高匿代理IP";
-            }
-            if (info[3]) {
-                type = info[3] == "HTTPS" ? IPData_1.default.AgreementType.HTTPS : IPData_1.default.AgreementType.HTTP;
-            }
-            if (info[4]) {
-                site = info[4];
-            }
-            if (info[5]) {
-                survive = info[5];
-            }
-            if (info[6]) {
-                checkTime = info[6];
-            }
-            if (info.length == 7) {
-                var ipdData = new IPData_1.default(ip, port, type, anonymous, site);
-                result.push(ipdData);
-            }
+    Ip3366Pool.prototype.getIPData = function (info) {
+        var ip = "";
+        var port = "";
+        var anonymous = false;
+        var checkTime = "";
+        var survive = "";
+        var site = "";
+        var type = IPData_1.default.AgreementType.HTTP;
+        if (info[0]) {
+            ip = info[0];
         }
-        return result;
+        if (info[1]) {
+            port = info[1];
+        }
+        if (info[2]) {
+            anonymous = info[2] == "高匿代理IP";
+        }
+        if (info[3]) {
+            type = info[3] == "HTTPS" ? IPData_1.default.AgreementType.HTTPS : IPData_1.default.AgreementType.HTTP;
+        }
+        if (info[4]) {
+            site = info[4];
+        }
+        if (info[5]) {
+            survive = info[5];
+        }
+        if (info[6]) {
+            checkTime = info[6];
+        }
+        return new IPData_1.default(ip, port, type, anonymous, site);
     };
     return Ip3366Pool;
 }(PoolBase_1.default));
