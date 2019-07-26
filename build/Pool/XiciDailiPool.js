@@ -68,8 +68,8 @@ var XiciDailiPool = /** @class */ (function (_super) {
             if (info[6]) {
                 checkTime = info[6];
             }
-            if (info.length == 7 && parseInt(port) > 0) {
-                var ipdData = new IPData_1.default(ip, port, type, anonymous, site, survive, checkTime);
+            if (info.length == 7) {
+                var ipdData = new IPData_1.default(ip, port, type, anonymous, site);
                 result.push(ipdData);
             }
         });

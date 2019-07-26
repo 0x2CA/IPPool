@@ -1,12 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var superagent = require("superagent");
+require("superagent-proxy")(superagent);
 var RequestStatic = /** @class */ (function () {
     function RequestStatic() {
     }
-    RequestStatic.get = function (url) {
+    RequestStatic.get = function (url, proxy, timeout) {
         return new Promise(function (resolve, reject) {
-            superagent.get(url).end(function (err, res) {
+            var request = superagent.get(url);
+            if (proxy) {
+                request = request.proxy(proxy);
+            }
+            if (timeout) {
+                request = request.timeout(timeout);
+            }
+            request.end(function (err, res) {
                 if (!err) {
                     resolve(res);
                 }

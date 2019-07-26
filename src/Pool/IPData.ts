@@ -1,27 +1,25 @@
 class IPData {
-	ip: string;
-	port: string;
-	type: IPData.Type;
-	anonymous: boolean;
-	site: string;
-	survive: string;
-	checkTime: string;
-	constructor(
-		ip: string,
-		port: string,
-		type: IPData.Type,
-		anonymous: boolean,
-		site: string,
-		survive: string,
-		checkTime: string
-	) {
+	ip: string = "";
+	port: string = "";
+	type: IPData.Type = IPData.Type.HTTP;
+	anonymous: boolean = false;
+	site: string = "";
+	checkTime: Date = new Date();
+	isSurvive = false;
+
+	constructor(ip: string, port: string, type: IPData.Type, anonymous: boolean, site: string) {
 		this.ip = ip;
 		this.port = port;
 		this.type = type;
 		this.anonymous = anonymous;
 		this.site = site;
-		this.survive = survive;
-		this.checkTime = checkTime;
+		this.check();
+	}
+
+	check() {
+        
+		this.isSurvive = true;
+		this.checkTime = new Date();
 	}
 }
 

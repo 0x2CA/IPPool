@@ -57,8 +57,8 @@ export default class XiciDailiPool extends PoolBase {
 				checkTime = info[6];
 			}
 
-			if (info.length == 7 && parseInt(port) > 0) {
-				let ipdData = new IPData(ip, port, type, anonymous, site, survive, checkTime);
+			if (info.length == 7) {
+				let ipdData = new IPData(ip, port, type, anonymous, site);
 				result.push(ipdData);
 			}
 		});

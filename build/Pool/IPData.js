@@ -1,15 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var IPData = /** @class */ (function () {
-    function IPData(ip, port, type, anonymous, site, survive, checkTime) {
+    function IPData(ip, port, type, anonymous, site) {
+        this.ip = "";
+        this.port = "";
+        this.type = IPData.Type.HTTP;
+        this.anonymous = false;
+        this.site = "";
+        this.checkTime = new Date();
+        this.isSurvive = false;
         this.ip = ip;
         this.port = port;
         this.type = type;
         this.anonymous = anonymous;
         this.site = site;
-        this.survive = survive;
-        this.checkTime = checkTime;
+        this.check();
     }
+    IPData.prototype.check = function () {
+        this.isSurvive = true;
+        this.checkTime = new Date();
+    };
     return IPData;
 }());
 (function (IPData) {
