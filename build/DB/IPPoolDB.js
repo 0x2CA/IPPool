@@ -38,34 +38,41 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var IPPoolDB_1 = __importDefault(require("./DB/IPPoolDB"));
-var Application = /** @class */ (function () {
-    function Application() {
+var MonogoManage_1 = __importDefault(require("./MonogoManage"));
+var IPPoolDB = /** @class */ (function () {
+    function IPPoolDB() {
+        this.dbHost = "localhost";
+        this.dbPort = "27017";
+        this.dbName = "IPPool";
+        this.dbUser = "root";
+        this.dbPasswd = "root";
+        this.dbManage = new MonogoManage_1.default(this.dbHost, this.dbPort, this.dbName);
     }
-    Application.Main = function () {
-        var argv = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            argv[_i] = arguments[_i];
-        }
+    IPPoolDB.prototype.connect = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var db;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        db = new IPPoolDB_1.default();
-                        return [4 /*yield*/, db.connect()];
+                    case 0: return [4 /*yield*/, this.dbManage.connect()];
                     case 1:
-                        _a.sent();
-                        return [4 /*yield*/, db.close()];
-                    case 2:
                         _a.sent();
                         return [2 /*return*/];
                 }
             });
         });
     };
-    return Application;
+    IPPoolDB.prototype.close = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.dbManage.close()];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    return IPPoolDB;
 }());
-exports.default = Application;
-Application.Main.apply(Application, process.argv.slice(2));
-//# sourceMappingURL=Application.js.map
+exports.default = IPPoolDB;
+//# sourceMappingURL=IPPoolDB.js.map

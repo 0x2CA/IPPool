@@ -1,10 +1,9 @@
 import cheerio = require("cheerio");
-import RequestStatic from "../RequestStatic";
+import RequestStatic from "../Web/RequestStatic";
 import IPData from "./IPData";
 
 abstract class PoolBase {
 	protected page = 1;
-	private data: Array<Array<IPData>> = new Array<Array<IPData>>();
 
 	setPage(page: number) {
 		this.page = page;
@@ -25,41 +24,22 @@ abstract class PoolBase {
 	 * @returns
 	 * @memberof PoolBase
 	 */
-	async getPageData() {
+	async getPageData(proxy?: string) {
 		try {
 			let list: Array<IPData> = new Array<IPData>();
-			if (!this.data[this.page]) {
-				let html = await RequestStatic.get(
-					this.getAgreement() + this.getUrl(),
-					this.getCharset()
-				);
-				let infoList = this.parseHtml(cheerio.load(html));
-
-				for (let index = 0; index < infoList.length; index++) {
-					const info = infoList[index];
-					list.push(this.getIPData(info));
-				}
-			} else {
-				list = this.data[this.page];
+			let html = await RequestStatic.get(
+				this.getAgreement() + this.getUrl(),
+				this.getCharset(),
+				proxy
+			);
+			let infoList = this.parseHtml(cheerio.load(html));
+			for (let index = 0; index < infoList.length; index++) {
+				const info = infoList[index];
+				list.push(this.getIPData(info));
 			}
-
-			let promiseList = new Array<Promise<void>>();
-
-			for (let index = 0; index < list.length; index++) {
-				promiseList.push(list[index].check());
-			}
-
-			await Promise.all(promiseList);
-
-			let result = list.filter((value) => {
-				return value.isSurvive;
-			});
-
-			console.log("可用率", result.length / list.length);
-			return result;
+			return list;
 		} catch (error) {
 			console.error(error);
-			console.log("可用率", 0);
 			return [];
 		}
 	}

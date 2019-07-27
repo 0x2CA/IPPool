@@ -1,4 +1,17 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -38,34 +51,70 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var IPPoolDB_1 = __importDefault(require("./DB/IPPoolDB"));
-var Application = /** @class */ (function () {
-    function Application() {
-    }
-    Application.Main = function () {
-        var argv = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            argv[_i] = arguments[_i];
+var MongoDB = require("mongodb");
+var DBManage_1 = __importDefault(require("./DBManage"));
+var MongoClient = MongoDB.MongoClient;
+var MonogoManage = /** @class */ (function (_super) {
+    __extends(MonogoManage, _super);
+    function MonogoManage(dbHost, dbPort, dbName, dbUser, dbPasswd) {
+        var _this = _super.call(this) || this;
+        _this.db = null;
+        _this.dbHost = dbHost;
+        _this.dbPort = dbPort;
+        _this.dbName = dbName;
+        if (dbUser && dbPasswd) {
+            _this.dbUser = dbUser;
+            _this.dbPasswd = dbPasswd;
+            _this.dbSrc = "mongodb://" + _this.dbUser + ":" + _this.dbPasswd + "@" + _this.dbHost + ":" + _this.dbPort + "/" + _this.dbName;
         }
+        else {
+            _this.dbSrc = "mongodb://" + _this.dbHost + ":" + _this.dbPort + "/" + _this.dbName;
+        }
+        console.log(_this.dbSrc);
+        return _this;
+    }
+    MonogoManage.prototype.connect = function () {
+        var _this = this;
+        if (this.dbType == MonogoManage.DBType.OPEN) {
+            return Promise.resolve(this.db);
+        }
+        else {
+            return new Promise(function (resolve, reject) {
+                console.log("连接数据库!");
+                MongoClient.connect(_this.dbSrc, { useNewUrlParser: true }, function (err, db) {
+                    if (err) {
+                        reject(err);
+                    }
+                    else {
+                        _this.db = db;
+                        _this.dbType = MonogoManage.DBType.OPEN;
+                        console.log("连接成功!");
+                        resolve(db);
+                    }
+                });
+            });
+        }
+    };
+    MonogoManage.prototype.close = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var db;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        db = new IPPoolDB_1.default();
-                        return [4 /*yield*/, db.connect()];
+                        if (!(this.dbType == MonogoManage.DBType.OPEN && this.db)) return [3 /*break*/, 2];
+                        console.log("断开数据库!");
+                        return [4 /*yield*/, this.db.close()];
                     case 1:
                         _a.sent();
-                        return [4 /*yield*/, db.close()];
-                    case 2:
-                        _a.sent();
-                        return [2 /*return*/];
+                        this.dbType = MonogoManage.DBType.CLOSE;
+                        this.db = null;
+                        console.log("断开成功!");
+                        _a.label = 2;
+                    case 2: return [2 /*return*/];
                 }
             });
         });
     };
-    return Application;
-}());
-exports.default = Application;
-Application.Main.apply(Application, process.argv.slice(2));
-//# sourceMappingURL=Application.js.map
+    return MonogoManage;
+}(DBManage_1.default));
+exports.default = MonogoManage;
+//# sourceMappingURL=MonogoManage.js.map

@@ -38,7 +38,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var RequestStatic_1 = __importDefault(require("../RequestStatic"));
+var RequestStatic_1 = __importDefault(require("../Web/RequestStatic"));
 var IPData = /** @class */ (function () {
     function IPData(ip, port, agreement, anonymous, site) {
         this.ip = "";
@@ -55,29 +55,46 @@ var IPData = /** @class */ (function () {
         this.anonymous = anonymous;
         this.site = site;
     }
+    /**
+     * 判断是否相等
+     *
+     * @param {IPData} ipData
+     * @returns
+     * @memberof IPData
+     */
+    IPData.prototype.isEqual = function (ipData) {
+        if (ipData.getUrl() == this.getUrl() && ipData.getAgreement() == this.getAgreement()) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
     IPData.prototype.getAgreement = function () {
         return this.agreement;
     };
+    IPData.prototype.getUrl = function () {
+        return this.ip + ":" + this.port;
+    };
     IPData.prototype.check = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var result, proxy, agreement, error_1;
+            var proxy, agreement, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        result = "";
-                        proxy = IPData.AgreementType.HTTP + this.ip + ":" + this.port;
+                        proxy = IPData.AgreementType.HTTP + this.getUrl();
                         agreement = this.getAgreement();
                         return [4 /*yield*/, RequestStatic_1.default.get(agreement + this.testUrl, "utf8", proxy, 3000)];
                     case 1:
                         _a.sent();
                         this.isSurvive = true;
                         this.checkTime = new Date();
-                        return [3 /*break*/, 3];
+                        return [2 /*return*/, true];
                     case 2:
                         error_1 = _a.sent();
                         return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                    case 3: return [2 /*return*/, false];
                 }
             });
         });
