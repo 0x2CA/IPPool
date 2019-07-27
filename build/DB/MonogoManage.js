@@ -114,6 +114,44 @@ var MonogoManage = /** @class */ (function (_super) {
             });
         });
     };
+    MonogoManage.prototype.insertOne = function (table, data) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(this.dbType != DBManage_1.default.DBType.OPEN)) return [3 /*break*/, 1];
+                        throw new Error("请连接服务器!");
+                    case 1:
+                        if (!this.db) return [3 /*break*/, 3];
+                        return [4 /*yield*/, this.db
+                                .db(this.dbName)
+                                .collection(table)
+                                .insertOne(data)];
+                    case 2: return [2 /*return*/, _a.sent()];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    MonogoManage.prototype.insertMany = function (table, data) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(this.dbType != DBManage_1.default.DBType.OPEN)) return [3 /*break*/, 1];
+                        throw new Error("请连接服务器!");
+                    case 1:
+                        if (!this.db) return [3 /*break*/, 3];
+                        return [4 /*yield*/, this.db
+                                .db(this.dbName)
+                                .collection(table)
+                                .insertMany(data)];
+                    case 2: return [2 /*return*/, _a.sent()];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
     return MonogoManage;
 }(DBManage_1.default));
 exports.default = MonogoManage;

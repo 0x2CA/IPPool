@@ -38,6 +38,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var Ip3366Pool_1 = __importDefault(require("./Pool/Ip3366Pool"));
+var PoolManage_1 = __importDefault(require("./Pool/PoolManage"));
 var IPPoolDB_1 = __importDefault(require("./DB/IPPoolDB"));
 var Application = /** @class */ (function () {
     function Application() {
@@ -48,7 +50,7 @@ var Application = /** @class */ (function () {
             argv[_i] = arguments[_i];
         }
         return __awaiter(this, void 0, void 0, function () {
-            var db;
+            var db, pool, list, index;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -56,8 +58,20 @@ var Application = /** @class */ (function () {
                         return [4 /*yield*/, db.connect()];
                     case 1:
                         _a.sent();
-                        return [4 /*yield*/, db.close()];
+                        return [4 /*yield*/, PoolManage_1.default.getPool(Ip3366Pool_1.default)];
                     case 2:
+                        pool = _a.sent();
+                        return [4 /*yield*/, pool.getPageData()];
+                    case 3:
+                        list = _a.sent();
+                        for (index = 0; index < list.length; index++) {
+                            console.log(JSON.stringify(list[index]));
+                        }
+                        return [4 /*yield*/, db.insertMany("IPTable", list)];
+                    case 4:
+                        _a.sent();
+                        return [4 /*yield*/, db.close()];
+                    case 5:
                         _a.sent();
                         return [2 /*return*/];
                 }

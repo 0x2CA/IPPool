@@ -57,4 +57,26 @@ export default class MonogoManage extends DBManage {
 			console.log("断开成功!");
 		}
 	}
+
+	async insertOne(table: string, data: any) {
+		if (this.dbType != DBManage.DBType.OPEN) {
+			throw new Error("请连接服务器!");
+		} else if (this.db) {
+			return await this.db
+				.db(this.dbName)
+				.collection(table)
+				.insertOne(data);
+		}
+	}
+
+	async insertMany(table: string, data: Array<any>) {
+		if (this.dbType != DBManage.DBType.OPEN) {
+			throw new Error("请连接服务器!");
+		} else if (this.db) {
+			return await this.db
+				.db(this.dbName)
+				.collection(table)
+				.insertMany(data);
+		}
+	}
 }
