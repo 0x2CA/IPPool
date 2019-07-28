@@ -73,25 +73,8 @@ var IPPoolDB = /** @class */ (function () {
             });
         });
     };
-    IPPoolDB.prototype.insertOne = function (table, data) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.dbManage.insertOne(table, data)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
-    IPPoolDB.prototype.insertMany = function (table, data) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.dbManage.insertMany(table, data)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
+    IPPoolDB.prototype.getDBManage = function () {
+        return this.dbManage;
     };
     return IPPoolDB;
 }());

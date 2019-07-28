@@ -1,17 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -52,35 +39,42 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var MongoDB = require("mongodb");
-var DBManage_1 = __importDefault(require("./DBManage"));
+var PromiseHelper_1 = __importDefault(require("../PromiseHelper"));
 var MongoClient = MongoDB.MongoClient;
-var MonogoManage = /** @class */ (function (_super) {
-    __extends(MonogoManage, _super);
+var MonogoManage = /** @class */ (function () {
     function MonogoManage(dbHost, dbPort, dbName, dbUser, dbPasswd) {
-        var _this = _super.call(this) || this;
-        _this.db = null;
-        _this.dbHost = dbHost;
-        _this.dbPort = dbPort;
-        _this.dbName = dbName;
+        this.dbHost = dbHost;
+        this.dbPort = dbPort;
+        this.dbName = dbName;
+        this.dbUser = dbUser;
+        this.dbPasswd = dbPasswd;
+        this.db = null;
+        this.dbType = MonogoManage.DBType.CLOSE;
+        // this.dbHost = dbHost;
+        // this.dbPort = dbPort;
+        // this.dbName = dbName;
         if (dbUser && dbPasswd) {
-            _this.dbUser = dbUser;
-            _this.dbPasswd = dbPasswd;
-            _this.dbSrc = "mongodb://" + _this.dbUser + ":" + _this.dbPasswd + "@" + _this.dbHost + ":" + _this.dbPort + "/" + _this.dbName;
+            // this.dbUser = dbUser;
+            // this.dbPasswd = dbPasswd;
+            this.dbSrc = "mongodb://" + this.dbUser + ":" + this.dbPasswd + "@" + this.dbHost + ":" + this.dbPort + "/" + this.dbName;
         }
         else {
-            _this.dbSrc = "mongodb://" + _this.dbHost + ":" + _this.dbPort + "/" + _this.dbName;
+            this.dbSrc = "mongodb://" + this.dbHost + ":" + this.dbPort + "/" + this.dbName;
         }
-        console.log(_this.dbSrc);
-        return _this;
+        // console.log(this.dbSrc);
     }
+    MonogoManage.prototype.getDB = function () {
+        return this.db;
+    };
     MonogoManage.prototype.connect = function () {
         var _this = this;
         if (this.dbType == MonogoManage.DBType.OPEN) {
-            return Promise.resolve(this.db);
+            return Promise.resolve();
         }
-        else {
+        else if (this.dbType == MonogoManage.DBType.CLOSE) {
             return new Promise(function (resolve, reject) {
                 console.log("连接数据库!");
+                _this.dbType = MonogoManage.DBType.OPENING;
                 MongoClient.connect(_this.dbSrc, { useNewUrlParser: true }, function (err, db) {
                     if (err) {
                         reject(err);
@@ -89,10 +83,29 @@ var MonogoManage = /** @class */ (function (_super) {
                         _this.db = db;
                         _this.dbType = MonogoManage.DBType.OPEN;
                         console.log("连接成功!");
-                        resolve(db);
+                        resolve();
                     }
                 });
             });
+        }
+        else if (this.dbType == MonogoManage.DBType.OPENING) {
+            return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
+                var _this = this;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, PromiseHelper_1.default.awaitWhere(function () {
+                                _this.dbType == MonogoManage.DBType.OPEN ||
+                                    _this.dbType == MonogoManage.DBType.ERROR;
+                            })];
+                        case 1:
+                            _a.sent();
+                            if (this.dbType == MonogoManage.DBType.OPEN) {
+                                resolve();
+                            }
+                            return [2 /*return*/];
+                    }
+                });
+            }); });
         }
     };
     MonogoManage.prototype.close = function () {
@@ -119,7 +132,7 @@ var MonogoManage = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!(this.dbType != DBManage_1.default.DBType.OPEN)) return [3 /*break*/, 1];
+                        if (!(this.dbType != MonogoManage.DBType.OPEN)) return [3 /*break*/, 1];
                         throw new Error("请连接服务器!");
                     case 1:
                         if (!this.db) return [3 /*break*/, 3];
@@ -133,19 +146,115 @@ var MonogoManage = /** @class */ (function (_super) {
             });
         });
     };
-    MonogoManage.prototype.insertMany = function (table, data) {
+    MonogoManage.prototype.insertMany = function (table, dataList) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!(this.dbType != DBManage_1.default.DBType.OPEN)) return [3 /*break*/, 1];
+                        if (!(this.dbType != MonogoManage.DBType.OPEN)) return [3 /*break*/, 1];
                         throw new Error("请连接服务器!");
                     case 1:
                         if (!this.db) return [3 /*break*/, 3];
                         return [4 /*yield*/, this.db
                                 .db(this.dbName)
                                 .collection(table)
-                                .insertMany(data)];
+                                .insertMany(dataList)];
+                    case 2: return [2 /*return*/, _a.sent()];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    MonogoManage.prototype.find = function (table, where) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(this.dbType != MonogoManage.DBType.OPEN)) return [3 /*break*/, 1];
+                        throw new Error("请连接服务器!");
+                    case 1:
+                        if (!this.db) return [3 /*break*/, 3];
+                        return [4 /*yield*/, this.db
+                                .db(this.dbName)
+                                .collection(table)
+                                .find(where)
+                                .toArray()];
+                    case 2: return [2 /*return*/, _a.sent()];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    MonogoManage.prototype.updateOne = function (table, data, where) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(this.dbType != MonogoManage.DBType.OPEN)) return [3 /*break*/, 1];
+                        throw new Error("请连接服务器!");
+                    case 1:
+                        if (!this.db) return [3 /*break*/, 3];
+                        return [4 /*yield*/, this.db
+                                .db(this.dbName)
+                                .collection(table)
+                                .updateOne(where, { $set: data })];
+                    case 2: return [2 /*return*/, _a.sent()];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    MonogoManage.prototype.updateMany = function (table, data, where) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(this.dbType != MonogoManage.DBType.OPEN)) return [3 /*break*/, 1];
+                        throw new Error("请连接服务器!");
+                    case 1:
+                        if (!this.db) return [3 /*break*/, 3];
+                        return [4 /*yield*/, this.db
+                                .db(this.dbName)
+                                .collection(table)
+                                .updateMany(where, { $set: data })];
+                    case 2: return [2 /*return*/, _a.sent()];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    MonogoManage.prototype.deleteOne = function (table, where) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(this.dbType != MonogoManage.DBType.OPEN)) return [3 /*break*/, 1];
+                        throw new Error("请连接服务器!");
+                    case 1:
+                        if (!this.db) return [3 /*break*/, 3];
+                        return [4 /*yield*/, this.db
+                                .db(this.dbName)
+                                .collection(table)
+                                .deleteOne(where)];
+                    case 2: return [2 /*return*/, _a.sent()];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    MonogoManage.prototype.deleteMany = function (table, where) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(this.dbType != MonogoManage.DBType.OPEN)) return [3 /*break*/, 1];
+                        throw new Error("请连接服务器!");
+                    case 1:
+                        if (!this.db) return [3 /*break*/, 3];
+                        return [4 /*yield*/, this.db
+                                .db(this.dbName)
+                                .collection(table)
+                                .deleteMany(where)];
                     case 2: return [2 /*return*/, _a.sent()];
                     case 3: return [2 /*return*/];
                 }
@@ -153,6 +262,21 @@ var MonogoManage = /** @class */ (function (_super) {
         });
     };
     return MonogoManage;
-}(DBManage_1.default));
+}());
+(function (MonogoManage) {
+    var SortType;
+    (function (SortType) {
+        SortType[SortType["ASC"] = 1] = "ASC";
+        SortType[SortType["DESC"] = -1] = "DESC";
+    })(SortType = MonogoManage.SortType || (MonogoManage.SortType = {}));
+    var DBType;
+    (function (DBType) {
+        DBType[DBType["OPEN"] = 0] = "OPEN";
+        DBType[DBType["OPENING"] = 1] = "OPENING";
+        DBType[DBType["CLOSE"] = 2] = "CLOSE";
+        DBType[DBType["CLOSEING"] = 3] = "CLOSEING";
+        DBType[DBType["ERROR"] = 4] = "ERROR";
+    })(DBType = MonogoManage.DBType || (MonogoManage.DBType = {}));
+})(MonogoManage || (MonogoManage = {}));
 exports.default = MonogoManage;
 //# sourceMappingURL=MonogoManage.js.map

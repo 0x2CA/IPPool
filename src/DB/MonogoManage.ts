@@ -1,39 +1,45 @@
 import MongoDB = require("mongodb");
-import DBManage from "./DBManage";
+import PromiseHelper from "../PromiseHelper";
 const MongoClient = MongoDB.MongoClient;
 
-export default class MonogoManage extends DBManage {
+class MonogoManage {
 	private db: MongoDB.MongoClient | null = null;
+	private dbSrc: string;
+	private dbType: MonogoManage.DBType = MonogoManage.DBType.CLOSE;
 
 	constructor(
-		dbHost: string,
-		dbPort: string,
-		dbName: string,
-		dbUser?: String,
-		dbPasswd?: String
+		private dbHost: string,
+		private dbPort: string,
+		private dbName: string,
+		private dbUser?: String,
+		private dbPasswd?: String
 	) {
-		super();
-		this.dbHost = dbHost;
-		this.dbPort = dbPort;
-		this.dbName = dbName;
+		// this.dbHost = dbHost;
+		// this.dbPort = dbPort;
+		// this.dbName = dbName;
 		if (dbUser && dbPasswd) {
-			this.dbUser = dbUser;
-			this.dbPasswd = dbPasswd;
+			// this.dbUser = dbUser;
+			// this.dbPasswd = dbPasswd;
 			this.dbSrc = `mongodb://${this.dbUser}:${this.dbPasswd}@${this.dbHost}:${this.dbPort}/${
 				this.dbName
 			}`;
 		} else {
 			this.dbSrc = `mongodb://${this.dbHost}:${this.dbPort}/${this.dbName}`;
 		}
-		console.log(this.dbSrc);
+		// console.log(this.dbSrc);
+	}
+
+	getDB() {
+		return this.db;
 	}
 
 	connect() {
 		if (this.dbType == MonogoManage.DBType.OPEN) {
-			return Promise.resolve(this.db);
-		} else {
+			return Promise.resolve();
+		} else if (this.dbType == MonogoManage.DBType.CLOSE) {
 			return new Promise<MongoDB.MongoClient>((resolve, reject) => {
 				console.log("连接数据库!");
+				this.dbType = MonogoManage.DBType.OPENING;
 				MongoClient.connect(this.dbSrc, { useNewUrlParser: true }, (err, db) => {
 					if (err) {
 						reject(err);
@@ -41,9 +47,19 @@ export default class MonogoManage extends DBManage {
 						this.db = db;
 						this.dbType = MonogoManage.DBType.OPEN;
 						console.log("连接成功!");
-						resolve(db);
+						resolve();
 					}
 				});
+			});
+		} else if (this.dbType == MonogoManage.DBType.OPENING) {
+			return new Promise<MongoDB.MongoClient>(async (resolve, reject) => {
+				await PromiseHelper.awaitWhere(() => {
+					this.dbType == MonogoManage.DBType.OPEN ||
+						this.dbType == MonogoManage.DBType.ERROR;
+				});
+				if (this.dbType == MonogoManage.DBType.OPEN) {
+					resolve();
+				}
 			});
 		}
 	}
@@ -59,7 +75,7 @@ export default class MonogoManage extends DBManage {
 	}
 
 	async insertOne(table: string, data: any) {
-		if (this.dbType != DBManage.DBType.OPEN) {
+		if (this.dbType != MonogoManage.DBType.OPEN) {
 			throw new Error("请连接服务器!");
 		} else if (this.db) {
 			return await this.db
@@ -69,14 +85,86 @@ export default class MonogoManage extends DBManage {
 		}
 	}
 
-	async insertMany(table: string, data: Array<any>) {
-		if (this.dbType != DBManage.DBType.OPEN) {
+	async insertMany(table: string, dataList: Array<any>) {
+		if (this.dbType != MonogoManage.DBType.OPEN) {
 			throw new Error("请连接服务器!");
 		} else if (this.db) {
 			return await this.db
 				.db(this.dbName)
 				.collection(table)
-				.insertMany(data);
+				.insertMany(dataList);
+		}
+	}
+
+	async find(table: string, where: { [key: string]: any }) {
+		if (this.dbType != MonogoManage.DBType.OPEN) {
+			throw new Error("请连接服务器!");
+		} else if (this.db) {
+			return await this.db
+				.db(this.dbName)
+				.collection(table)
+				.find(where)
+				.toArray();
+		}
+	}
+
+	async updateOne(table: string, data: any, where: { [key: string]: any }) {
+		if (this.dbType != MonogoManage.DBType.OPEN) {
+			throw new Error("请连接服务器!");
+		} else if (this.db) {
+			return await this.db
+				.db(this.dbName)
+				.collection(table)
+				.updateOne(where, { $set: data });
+		}
+	}
+
+	async updateMany(table: string, data: any, where: { [key: string]: any }) {
+		if (this.dbType != MonogoManage.DBType.OPEN) {
+			throw new Error("请连接服务器!");
+		} else if (this.db) {
+			return await this.db
+				.db(this.dbName)
+				.collection(table)
+				.updateMany(where, { $set: data });
+		}
+	}
+
+	async deleteOne(table: string, where: { [key: string]: any }) {
+		if (this.dbType != MonogoManage.DBType.OPEN) {
+			throw new Error("请连接服务器!");
+		} else if (this.db) {
+			return await this.db
+				.db(this.dbName)
+				.collection(table)
+				.deleteOne(where);
+		}
+	}
+
+	async deleteMany(table: string, where: { [key: string]: any }) {
+		if (this.dbType != MonogoManage.DBType.OPEN) {
+			throw new Error("请连接服务器!");
+		} else if (this.db) {
+			return await this.db
+				.db(this.dbName)
+				.collection(table)
+				.deleteMany(where);
 		}
 	}
 }
+
+namespace MonogoManage {
+	export enum SortType {
+		ASC = 1,
+		DESC = -1,
+	}
+	export enum DBType {
+		OPEN,
+		OPENING,
+		CLOSE,
+		CLOSEING,
+		ERROR,
+	}
+}
+
+export default MonogoManage;

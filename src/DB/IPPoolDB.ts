@@ -1,5 +1,4 @@
 import MonogoManage from "./MonogoManage";
-import DBManage from "./DBManage";
 
 export default class IPPoolDB {
 	private dbHost: string = "localhost";
@@ -22,10 +21,7 @@ export default class IPPoolDB {
 		await this.dbManage.close();
 	}
 
-	async insertOne(table: string, data: any) {
-		return await this.dbManage.insertOne(table, data);
-	}
-	async insertMany(table: string, data: Array<any>) {
-		return await this.dbManage.insertMany(table, data);
+	getDBManage() {
+		return this.dbManage;
 	}
 }

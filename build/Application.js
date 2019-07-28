@@ -38,8 +38,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Ip3366Pool_1 = __importDefault(require("./Pool/Ip3366Pool"));
-var PoolManage_1 = __importDefault(require("./Pool/PoolManage"));
 var IPPoolDB_1 = __importDefault(require("./DB/IPPoolDB"));
 var Application = /** @class */ (function () {
     function Application() {
@@ -50,29 +48,46 @@ var Application = /** @class */ (function () {
             argv[_i] = arguments[_i];
         }
         return __awaiter(this, void 0, void 0, function () {
-            var db, pool, list, index;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var ipPoolDB, _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
+            return __generator(this, function (_o) {
+                switch (_o.label) {
                     case 0:
-                        db = new IPPoolDB_1.default();
-                        return [4 /*yield*/, db.connect()];
+                        ipPoolDB = new IPPoolDB_1.default();
+                        return [4 /*yield*/, ipPoolDB.connect()];
                     case 1:
-                        _a.sent();
-                        return [4 /*yield*/, PoolManage_1.default.getPool(Ip3366Pool_1.default)];
+                        _o.sent();
+                        // let pool = await PoolManage.getPool(Ip3366Pool);
+                        // let list = await pool.getPageData();
+                        // for (let index = 0; index < list.length; index++) {
+                        // 	console.log(JSON.stringify(list[index]));
+                        // }
+                        // await ipPoolDB.getDB().insertMany("IPTable", list);
+                        _b = (_a = console).log;
+                        _d = (_c = JSON).stringify;
+                        return [4 /*yield*/, ipPoolDB.getDBManage().find("IPTable", { ip: "114.246.148.106" })];
                     case 2:
-                        pool = _a.sent();
-                        return [4 /*yield*/, pool.getPageData()];
+                        // let pool = await PoolManage.getPool(Ip3366Pool);
+                        // let list = await pool.getPageData();
+                        // for (let index = 0; index < list.length; index++) {
+                        // 	console.log(JSON.stringify(list[index]));
+                        // }
+                        // await ipPoolDB.getDB().insertMany("IPTable", list);
+                        _b.apply(_a, [_d.apply(_c, [_o.sent()])]);
+                        _f = (_e = console).log;
+                        _h = (_g = JSON).stringify;
+                        return [4 /*yield*/, ipPoolDB
+                                .getDBManage()
+                                .updateOne("IPTable", { ip: "updateOne" }, { ip: "114.246.148.106" })];
                     case 3:
-                        list = _a.sent();
-                        for (index = 0; index < list.length; index++) {
-                            console.log(JSON.stringify(list[index]));
-                        }
-                        return [4 /*yield*/, db.insertMany("IPTable", list)];
+                        _f.apply(_e, [_h.apply(_g, [_o.sent()])]);
+                        _k = (_j = console).log;
+                        _m = (_l = JSON).stringify;
+                        return [4 /*yield*/, ipPoolDB.getDBManage().find("IPTable", { ip: "updateOne" })];
                     case 4:
-                        _a.sent();
-                        return [4 /*yield*/, db.close()];
+                        _k.apply(_j, [_m.apply(_l, [_o.sent()])]);
+                        return [4 /*yield*/, ipPoolDB.close()];
                     case 5:
-                        _a.sent();
+                        _o.sent();
                         return [2 /*return*/];
                 }
             });
