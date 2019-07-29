@@ -6,7 +6,7 @@ class IPData {
 	private agreement: IPData.AgreementType = IPData.AgreementType.HTTP;
 	anonymous: boolean = false;
 	site: string = "";
-	checkTime: Date = new Date();
+	checkTime: number = 0;
 	isSurvive = false;
 	private assess = 100;
 	private id = "";
@@ -18,7 +18,7 @@ class IPData {
 		anonymous: boolean,
 		site: string,
 		assess = 100,
-		checkTime = new Date()
+		checkTime = 0
 	) {
 		this.ip = ip;
 		this.port = port;
@@ -112,12 +112,12 @@ class IPData {
 			let agreement = this.getAgreement();
 			await RequestStatic.get(this.getTestUrl(), "utf8", this.getProxy(), 3000);
 			this.isSurvive = true;
-			this.checkTime = new Date();
+			this.checkTime = new Date().getTime();
 			this.addAssess();
 			return true;
 		} catch (error) {
 			this.isSurvive = false;
-			this.checkTime = new Date();
+			this.checkTime = new Date().getTime();
 			this.subAssess();
 			// console.error(error);
 		}

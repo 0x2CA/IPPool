@@ -31,8 +31,8 @@ export default class IPPoolDB {
 		await this.getDBManage().createUniqueIndex("IPTable", "id");
 		for (let index = 0; index < list.length; index++) {
 			try {
-				let dbInfo = await this.getIPData(list[index].getID());
-				if (!dbInfo) {
+				let dbInfo = await this.getIPData({ id: list[index].getID() });
+				if (dbInfo.length == 0) {
 					await list[index].check();
 					await this.getDBManage().insertOne("IPTable", list[index]);
 					result.push(list[index]);
@@ -75,7 +75,7 @@ interface Proxy {
 	agreement: IPData.AgreementType;
 	anonymous: boolean;
 	site: string;
-	checkTime: Date;
+	checkTime: number;
 	assess: number;
 	id: string;
 }
