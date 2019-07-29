@@ -2,6 +2,9 @@ import PoolBase from "./PoolBase";
 import IPData from "./IPData";
 
 export default class KuaiDailiPool extends PoolBase {
+    protected parseMaxPage($: CheerioStatic): number {
+        throw new Error("Method not implemented.");
+    }
 	getAgreement(): PoolBase.AgreementType {
 		return PoolBase.AgreementType.HTTPS;
 	}
@@ -35,9 +38,11 @@ export default class KuaiDailiPool extends PoolBase {
 			type = info[3] == "HTTPS" ? IPData.AgreementType.HTTPS : IPData.AgreementType.HTTP;
 		}
 
-		if (info[4]) {
-			site = info[4];
-		}
+		// if (info[4]) {
+		// 	site = info[4];
+		// }
+
+		site = "中国";
 
 		if (info[5]) {
 			survive = info[5];

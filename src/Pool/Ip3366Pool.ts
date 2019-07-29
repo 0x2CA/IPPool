@@ -2,6 +2,21 @@ import PoolBase from "./PoolBase";
 import IPData from "./IPData";
 
 export default class Ip3366Pool extends PoolBase {
+	protected parseMaxPage($?: CheerioStatic): number {
+		if (this.maxPage != 0) {
+			return this.maxPage;
+		} else {
+			let max = 0;
+			if ($) {
+				max = parseInt($("#listnav ul b font").text());
+				if (max > 0) {
+					this.maxPage = max;
+				}
+			}
+			return max;
+		}
+	}
+
 	protected getCharset(): PoolBase.CharsetType {
 		return PoolBase.CharsetType.GB2312;
 	}
@@ -39,9 +54,11 @@ export default class Ip3366Pool extends PoolBase {
 			type = info[3] == "HTTPS" ? IPData.AgreementType.HTTPS : IPData.AgreementType.HTTP;
 		}
 
-		if (info[4]) {
-			site = info[4];
-		}
+		// if (info[4]) {
+		// 	site = info[4];
+		// }
+
+		site = "中国";
 
 		if (info[5]) {
 			survive = info[5];

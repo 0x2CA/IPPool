@@ -9,12 +9,44 @@ export default class Application {
 		await ipPoolDB.connect();
 
 		let pool = await PoolManage.getPool(Ip3366Pool);
-		let list = await pool.getPageData();
 
-		await ipPoolDB.insertIPData(...list);
+		let proxyList = await ipPoolDB.getIPData({
+			isSurvive: true,
+			agreement: pool.getAgreement(),
+		});
+		let proxyIndex = 0;
 
-		let info = await ipPoolDB.getIPData({isSurvive:true,agreement: IPData.AgreementType.HTTP});
-		console.log(info);
+		for (let index = 1; index <= (await pool.getMaxPage()); index++) {
+			pool.setPage(index);
+			if (proxyList[proxyIndex]) {
+				//使用代理
+				try {
+					let list = await pool.getPageData(proxyList[proxyIndex].getProxy());
+					await ipPoolDB.insertIPData(...list);
+				} catch (error) {
+					//使用代理失败，推回和更新代理
+					index--;
+					ipPoolDB.updateIPData(proxyList[proxyIndex].getID());
+				}
+				//使用过代理
+				proxyIndex++;
+			} else {
+				//不使用代理
+				try {
+					let list = await pool.getPageData();
+					await ipPoolDB.insertIPData(...list);
+				} catch (error) {
+					//不使用代理失败，退回
+					index--;
+				}
+				//获取最新代理
+				proxyList = await ipPoolDB.getIPData({
+					isSurvive: true,
+					agreement: pool.getAgreement(),
+				});
+				proxyIndex = 0;
+			}
+		}
 
 		await ipPoolDB.close();
 	}

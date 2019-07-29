@@ -31,12 +31,15 @@ export default class IPPoolDB {
 		await this.getDBManage().createUniqueIndex("IPTable", "id");
 		for (let index = 0; index < list.length; index++) {
 			try {
-				let dbInfo = await this.getIPData({ id: list[index].getID() });
+				let dbInfo = await this.getIPData({
+					id: list[index].getID(),
+				});
 				if (dbInfo.length == 0) {
 					await list[index].check();
 					await this.getDBManage().insertOne("IPTable", list[index]);
 					result.push(list[index]);
 				} else {
+					await this.updateIPData(list[index].getID());
 					console.error("数据库已经存在:", list[index].getID());
 				}
 			} catch (error) {
@@ -44,6 +47,28 @@ export default class IPPoolDB {
 			}
 		}
 		return result;
+	}
+
+	async updateIPData(id: string) {
+		let list = await this.getIPData({ id });
+		if (list.length == 1) {
+			await list[0].check();
+			if (list[0].getAssess() == 0) {
+				await this.getDBManage().deleteOne("IPTable", { id });
+				console.warn("分数过低清除:", list[0].getID());
+			} else {
+				await this.getDBManage().updateOne(
+					"IPTable",
+					{
+						checkTime: list[0].getCheckTime(),
+						isSurvive: list[0].getSurvive(),
+						assess: list[0].getAssess(),
+					},
+					{ id }
+				);
+				return list[0];
+			}
+		}
 	}
 
 	async getIPData(when: any) {
@@ -60,12 +85,33 @@ export default class IPPoolDB {
 						info.anonymous,
 						info.site,
 						info.assess,
-						info.checkTime
+						info.checkTime,
+						info.isSurvive
 					)
 				);
 			}
 		}
 		return result;
+	}
+
+	async getIPDataByHttp() {
+		return await this.getIPData({
+			agreement: IPData.AgreementType.HTTP,
+			isSurvive: true,
+		});
+	}
+
+	async getIPDataByHttps() {
+		return await this.getIPData({
+			agreement: IPData.AgreementType.HTTPS,
+			isSurvive: true,
+		});
+	}
+
+	async getIPDataByIsSurvive(isSurvive: boolean) {
+		return await this.getIPData({
+			isSurvive,
+		});
 	}
 }
 
@@ -78,4 +124,5 @@ interface Proxy {
 	checkTime: number;
 	assess: number;
 	id: string;
+	isSurvive: boolean;
 }

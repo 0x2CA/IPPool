@@ -4,13 +4,30 @@ import IPData from "./IPData";
 
 abstract class PoolBase {
 	protected page = 1;
+	protected maxPage = 0;
 
 	setPage(page: number) {
 		this.page = page;
 	}
+
 	getPage() {
 		return this.page;
 	}
+
+	async getMaxPage($?: CheerioStatic) {
+		let maxPage = 0;
+		if ($) {
+			maxPage = this.parseMaxPage($);
+		} else {
+			let html = await RequestStatic.get(
+				this.getAgreement() + this.getUrl(),
+				this.getCharset()
+			);
+			maxPage = this.parseMaxPage(cheerio.load(html));
+		}
+		return maxPage;
+	}
+
 	nextPage() {
 		this.page++;
 	}
@@ -25,6 +42,12 @@ abstract class PoolBase {
 	 * @memberof PoolBase
 	 */
 	async getPageData(proxy?: string) {
+		if (proxy) {
+			console.log("使用代理:", proxy, "获取:", this.getAgreement() + this.getUrl());
+		} else {
+			console.log("获取:", this.getAgreement() + this.getUrl());
+		}
+
 		try {
 			let list: Array<IPData> = new Array<IPData>();
 			let html = await RequestStatic.get(
@@ -32,6 +55,9 @@ abstract class PoolBase {
 				this.getCharset(),
 				proxy
 			);
+			if (this.maxPage == 0) {
+				await this.getMaxPage(cheerio.load(html));
+			}
 			let infoList = this.parseHtml(cheerio.load(html));
 			for (let index = 0; index < infoList.length; index++) {
 				const info = infoList[index];
@@ -71,6 +97,8 @@ abstract class PoolBase {
 		});
 		return result;
 	}
+
+	protected abstract parseMaxPage($: CheerioStatic): number;
 
 	/**
 	 * 获取协议

@@ -2,6 +2,9 @@ import PoolBase from "./PoolBase";
 import IPData from "./IPData";
 
 export default class XiciDailiPool extends PoolBase {
+    protected parseMaxPage($: CheerioStatic): number {
+        throw new Error("Method not implemented.");
+    }
 	getAgreement(): PoolBase.AgreementType {
 		return PoolBase.AgreementType.HTTPS;
 	}
@@ -27,9 +30,11 @@ export default class XiciDailiPool extends PoolBase {
 			port = info[1];
 		}
 
-		if (info[2]) {
-			site = info[2];
-		}
+		// if (info[2]) {
+		// 	site = info[2];
+		// }
+
+		site = "中国";
 
 		if (info[3]) {
 			anonymous = info[3] == "高匿";

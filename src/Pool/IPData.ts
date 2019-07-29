@@ -1,15 +1,23 @@
 import RequestStatic from "../Web/RequestStatic";
 
 class IPData {
-	ip: string = "";
-	port: string = "";
+	private ip: string = "";
+	private port: string = "";
 	private agreement: IPData.AgreementType = IPData.AgreementType.HTTP;
-	anonymous: boolean = false;
-	site: string = "";
-	checkTime: number = 0;
-	isSurvive = false;
+	private anonymous: boolean = false;
+	private site: string = "";
+	private checkTime: number = 0;
+	private isSurvive = false;
 	private assess = 100;
 	private id = "";
+
+	getSurvive() {
+		return this.isSurvive;
+	}
+
+	getCheckTime() {
+		return this.checkTime;
+	}
 
 	constructor(
 		ip: string,
@@ -18,7 +26,8 @@ class IPData {
 		anonymous: boolean,
 		site: string,
 		assess = 100,
-		checkTime = 0
+		checkTime = 0,
+		isSurvive = false
 	) {
 		this.ip = ip;
 		this.port = port;
@@ -28,6 +37,7 @@ class IPData {
 		this.assess = assess;
 		this.id = this.agreement + this.ip + ":" + this.port;
 		this.checkTime = checkTime;
+		this.isSurvive = isSurvive;
 	}
 
 	getTestUrl() {
