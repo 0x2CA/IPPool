@@ -27,27 +27,31 @@ export default class IPPoolDB {
 	}
 
 	async insertIPData(...list: Array<IPData>) {
-		let result = new Array<IPData>();
 		await this.getDBManage().createUniqueIndex("IPTable", "id");
+		let promiseList = new Array<Promise<any>>();
 		for (let index = 0; index < list.length; index++) {
-			try {
-				let dbInfo = await this.getIPData({
-					id: list[index].getID(),
-				});
-				if (dbInfo.length == 0) {
-					await list[index].check();
-                    await this.getDBManage().insertOne("IPTable", list[index]);
-					console.log("写入数据库:", list[index].getID());                    
-					result.push(list[index]);
-				} else {
-					await this.updateIPData(list[index].getID());
-					console.error("数据库已经存在:", list[index].getID());
-				}
-			} catch (error) {
-				console.error(error);
-			}
+			promiseList.push(this.insertIPDataOne(list[index]));
 		}
-		return result;
+		await Promise.all(promiseList);
+	}
+
+	async insertIPDataOne(ipData: IPData) {
+		try {
+			let dbInfo = await this.getIPData({
+				id: ipData.getID(),
+			});
+			if (dbInfo.length == 0) {
+				await ipData.check();
+				await this.getDBManage().insertOne("IPTable", ipData);
+				console.log("写入数据库:", ipData.getID());
+				return ipData;
+			} else {
+				await this.updateIPData(ipData.getID());
+				console.error("数据库已经存在:", ipData.getID());
+			}
+		} catch (error) {
+			console.error(error);
+		}
 	}
 
 	async updateIPData(id: string) {
@@ -55,7 +59,9 @@ export default class IPPoolDB {
 		if (list.length == 1) {
 			await list[0].check();
 			if (list[0].getAssess() == 0) {
-				await this.getDBManage().deleteOne("IPTable", { id });
+				await this.getDBManage().deleteOne("IPTable", {
+					id,
+				});
 				console.warn("分数过低清除:", list[0].getID());
 			} else {
 				await this.getDBManage().updateOne(

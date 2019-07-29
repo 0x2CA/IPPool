@@ -120,7 +120,7 @@ class IPData {
 		try {
 			let proxy = this.getProxy();
 			let agreement = this.getAgreement();
-			await RequestStatic.get(this.getTestUrl(), "utf8", this.getProxy(), 3000);
+			await RequestStatic.get(this.getTestUrl(), "utf8", this.getProxy());
 			this.isSurvive = true;
 			this.checkTime = new Date().getTime();
 			this.addAssess();
