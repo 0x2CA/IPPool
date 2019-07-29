@@ -36,7 +36,8 @@ export default class IPPoolDB {
 				});
 				if (dbInfo.length == 0) {
 					await list[index].check();
-					await this.getDBManage().insertOne("IPTable", list[index]);
+                    await this.getDBManage().insertOne("IPTable", list[index]);
+					console.log("写入数据库:", list[index].getID());                    
 					result.push(list[index]);
 				} else {
 					await this.updateIPData(list[index].getID());
