@@ -8,8 +8,8 @@ class IPData {
 	site: string = "";
 	checkTime: Date = new Date();
 	isSurvive = false;
-	private readonly testUrl = "www.baidu.com";
 	private assess = 100;
+	private id = "";
 
 	constructor(
 		ip: string,
@@ -17,7 +17,8 @@ class IPData {
 		agreement: IPData.AgreementType,
 		anonymous: boolean,
 		site: string,
-		assess = 100
+		assess = 100,
+		checkTime = new Date()
 	) {
 		this.ip = ip;
 		this.port = port;
@@ -25,6 +26,22 @@ class IPData {
 		this.anonymous = anonymous;
 		this.site = site;
 		this.assess = assess;
+		this.id = this.agreement + this.ip + ":" + this.port;
+		this.checkTime = checkTime;
+	}
+
+	getTestUrl() {
+		return this.agreement + "www.baidu.com";
+	}
+
+	/**
+	 * 获取ID
+	 *
+	 * @returns
+	 * @memberof IPData
+	 */
+	getID() {
+		return this.id;
 	}
 
 	/**
@@ -35,7 +52,7 @@ class IPData {
 	 * @memberof IPData
 	 */
 	isEqual(ipData: IPData) {
-		if (ipData.getUrl() == this.getUrl() && ipData.getAgreement() == this.getAgreement()) {
+		if (ipData.getID() == this.getID()) {
 			return true;
 		} else {
 			return false;
@@ -69,25 +86,38 @@ class IPData {
 			this.assess = 0;
 		}
 	}
-
+	/**
+	 * 获取支持协议
+	 *
+	 * @returns
+	 * @memberof IPData
+	 */
 	getAgreement() {
 		return this.agreement;
 	}
 
-	getUrl() {
-		return this.ip + ":" + this.port;
+	/**
+	 * 获取当前代理地址
+	 *
+	 * @returns
+	 * @memberof IPData
+	 */
+	getProxy() {
+		return IPData.AgreementType.HTTP + this.ip + ":" + this.port;
 	}
 
 	async check() {
 		try {
-			let proxy = IPData.AgreementType.HTTP + this.getUrl();
+			let proxy = this.getProxy();
 			let agreement = this.getAgreement();
-			await RequestStatic.get(agreement + this.testUrl, "utf8", proxy, 3000);
+			await RequestStatic.get(this.getTestUrl(), "utf8", this.getProxy(), 3000);
 			this.isSurvive = true;
 			this.checkTime = new Date();
 			this.addAssess();
 			return true;
 		} catch (error) {
+			this.isSurvive = false;
+			this.checkTime = new Date();
 			this.subAssess();
 			// console.error(error);
 		}

@@ -74,6 +74,29 @@ class MonogoManage {
 		}
 	}
 
+	async createUniqueIndex(table: string, key: string) {
+		if (this.dbType != MonogoManage.DBType.OPEN) {
+			throw new Error("请连接服务器!");
+		} else if (this.db) {
+			let index: { [key: string]: number } = {};
+			index[key] = 1;
+			return await this.db
+				.db(this.dbName)
+				.collection(table)
+				.createIndex(index, { unique: true });
+		}
+	}
+	async dropIndex(table: string, key: string) {
+		if (this.dbType != MonogoManage.DBType.OPEN) {
+			throw new Error("请连接服务器!");
+		} else if (this.db) {
+			return await this.db
+				.db(this.dbName)
+				.collection(table)
+				.dropIndex(key);
+		}
+	}
+
 	async insertOne(table: string, data: any) {
 		if (this.dbType != MonogoManage.DBType.OPEN) {
 			throw new Error("请连接服务器!");
@@ -96,7 +119,7 @@ class MonogoManage {
 		}
 	}
 
-	async find(table: string, where: { [key: string]: any }) {
+	async find<T>(table: string, where: { [key: string]: any }): Promise<Array<T>> {
 		if (this.dbType != MonogoManage.DBType.OPEN) {
 			throw new Error("请连接服务器!");
 		} else if (this.db) {
@@ -106,6 +129,8 @@ class MonogoManage {
 				.find(where)
 				.toArray();
 		}
+
+		return Promise.resolve([]);
 	}
 
 	async updateOne(table: string, data: any, where: { [key: string]: any }) {

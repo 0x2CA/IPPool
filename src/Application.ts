@@ -10,15 +10,11 @@ export default class Application {
 
 		let pool = await PoolManage.getPool(Ip3366Pool);
 		let list = await pool.getPageData();
-		for (let index = 0; index < list.length; index++) {
-			console.log(JSON.stringify(list[index]));
-		}
 
-		await ipPoolDB.getDBManage().insertMany("IPTable", list);
+		await ipPoolDB.insertIPData(...list);
 
-		console.log(
-			JSON.stringify(await ipPoolDB.getDBManage().find("IPTable", { ip: "114.246.148.106" }))
-		);
+		let info = await ipPoolDB.getIPData("http://119.180.130.170:8060");
+		console.log(info);
 
 		await ipPoolDB.close();
 	}
