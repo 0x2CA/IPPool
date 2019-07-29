@@ -46,21 +46,26 @@ export default class IPPoolDB {
 		return result;
 	}
 
-	async getIPData(id: string) {
-		let result: Array<Proxy> = await this.getDBManage().find("IPTable", { id });
-		if (result.length > 0) {
-			let info = result[0];
-			return new IPData(
-				info.ip,
-				info.port,
-				info.agreement,
-				info.anonymous,
-				info.site,
-				info.assess,
-				info.checkTime
-			);
+	async getIPData(when: any) {
+		let result = new Array<IPData>();
+		let list: Array<Proxy> = await this.getDBManage().find("IPTable", when);
+		if (list.length > 0) {
+			for (let index = 0; index < list.length; index++) {
+				const info = list[index];
+				result.push(
+					new IPData(
+						info.ip,
+						info.port,
+						info.agreement,
+						info.anonymous,
+						info.site,
+						info.assess,
+						info.checkTime
+					)
+				);
+			}
 		}
-		return null;
+		return result;
 	}
 }
 

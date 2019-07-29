@@ -119,61 +119,61 @@ class MonogoManage {
 		}
 	}
 
-	async find<T>(table: string, where: { [key: string]: any }): Promise<Array<T>> {
+	async find<T>(table: string, when: { [key: string]: any }): Promise<Array<T>> {
 		if (this.dbType != MonogoManage.DBType.OPEN) {
 			throw new Error("请连接服务器!");
 		} else if (this.db) {
 			return await this.db
 				.db(this.dbName)
 				.collection(table)
-				.find(where)
+				.find(when)
 				.toArray();
 		}
 
 		return Promise.resolve([]);
 	}
 
-	async updateOne(table: string, data: any, where: { [key: string]: any }) {
+	async updateOne(table: string, data: any, when: { [key: string]: any }) {
 		if (this.dbType != MonogoManage.DBType.OPEN) {
 			throw new Error("请连接服务器!");
 		} else if (this.db) {
 			return await this.db
 				.db(this.dbName)
 				.collection(table)
-				.updateOne(where, { $set: data });
+				.updateOne(when, { $set: data });
 		}
 	}
 
-	async updateMany(table: string, data: any, where: { [key: string]: any }) {
+	async updateMany(table: string, data: any, when: { [key: string]: any }) {
 		if (this.dbType != MonogoManage.DBType.OPEN) {
 			throw new Error("请连接服务器!");
 		} else if (this.db) {
 			return await this.db
 				.db(this.dbName)
 				.collection(table)
-				.updateMany(where, { $set: data });
+				.updateMany(when, { $set: data });
 		}
 	}
 
-	async deleteOne(table: string, where: { [key: string]: any }) {
+	async deleteOne(table: string, when: { [key: string]: any }) {
 		if (this.dbType != MonogoManage.DBType.OPEN) {
 			throw new Error("请连接服务器!");
 		} else if (this.db) {
 			return await this.db
 				.db(this.dbName)
 				.collection(table)
-				.deleteOne(where);
+				.deleteOne(when);
 		}
 	}
 
-	async deleteMany(table: string, where: { [key: string]: any }) {
+	async deleteMany(table: string, when: { [key: string]: any }) {
 		if (this.dbType != MonogoManage.DBType.OPEN) {
 			throw new Error("请连接服务器!");
 		} else if (this.db) {
 			return await this.db
 				.db(this.dbName)
 				.collection(table)
-				.deleteMany(where);
+				.deleteMany(when);
 		}
 	}
 }

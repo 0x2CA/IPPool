@@ -13,7 +13,7 @@ export default class Application {
 
 		await ipPoolDB.insertIPData(...list);
 
-		let info = await ipPoolDB.getIPData("http://119.180.130.170:8060");
+		let info = await ipPoolDB.getIPData({isSurvive:true,agreement: IPData.AgreementType.HTTP});
 		console.log(info);
 
 		await ipPoolDB.close();
