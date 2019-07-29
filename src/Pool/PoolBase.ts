@@ -48,26 +48,26 @@ abstract class PoolBase {
 			console.log("获取:", this.getAgreement() + this.getUrl());
 		}
 
-		try {
-			let list: Array<IPData> = new Array<IPData>();
-			let html = await RequestStatic.get(
-				this.getAgreement() + this.getUrl(),
-				this.getCharset(),
-				proxy
-			);
-			if (this.maxPage == 0) {
-				await this.getMaxPage(cheerio.load(html));
-			}
-			let infoList = this.parseHtml(cheerio.load(html));
-			for (let index = 0; index < infoList.length; index++) {
-				const info = infoList[index];
-				list.push(this.getIPData(info));
-			}
-			return list;
-		} catch (error) {
-			console.error(error);
-			return [];
+		// try {
+		let list: Array<IPData> = new Array<IPData>();
+		let html = await RequestStatic.get(
+			this.getAgreement() + this.getUrl(),
+			this.getCharset(),
+			proxy
+		);
+		if (this.maxPage == 0) {
+			await this.getMaxPage(cheerio.load(html));
 		}
+		let infoList = this.parseHtml(cheerio.load(html));
+		for (let index = 0; index < infoList.length; index++) {
+			const info = infoList[index];
+			list.push(this.getIPData(info));
+		}
+		return list;
+		// } catch (error) {
+		// 	console.error(error);
+		// 	return [];
+		// }
 	}
 
 	/**

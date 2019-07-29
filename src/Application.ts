@@ -25,6 +25,7 @@ export default class Application {
 					await ipPoolDB.insertIPData(...list);
 				} catch (error) {
 					//使用代理失败，推回和更新代理
+					console.error(error);
 					index--;
 					ipPoolDB.updateIPData(proxyList[proxyIndex].getID());
 				}
@@ -37,6 +38,7 @@ export default class Application {
 					await ipPoolDB.insertIPData(...list);
 				} catch (error) {
 					//不使用代理失败，退回
+					console.error(error);
 					index--;
 				}
 				//获取最新代理
