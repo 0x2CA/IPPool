@@ -53,7 +53,7 @@ class MonogoManage {
 			});
 		} else if (this.dbType == MonogoManage.DBType.OPENING) {
 			return new Promise<MongoDB.MongoClient>(async (resolve, reject) => {
-				await PromiseHelper.awaitWhere(() => {
+				await PromiseHelper.awaitWhen(() => {
 					this.dbType == MonogoManage.DBType.OPEN ||
 						this.dbType == MonogoManage.DBType.ERROR;
 				});
