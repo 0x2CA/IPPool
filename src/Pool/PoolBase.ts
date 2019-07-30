@@ -14,18 +14,28 @@ abstract class PoolBase {
 		return this.page;
 	}
 
-	async getMaxPage($?: CheerioStatic) {
-		let maxPage = 0;
-		if ($) {
-			maxPage = this.parseMaxPage($);
+	async getMaxPage($?: CheerioStatic | null, proxy?: string) {
+		if (this.maxPage > 0) {
+			return this.maxPage;
 		} else {
-			let html = await RequestStatic.get(
-				this.getAgreement() + this.getUrl(),
-				this.getCharset()
-			);
-			maxPage = this.parseMaxPage(cheerio.load(html));
+			let maxPage = 0;
+			if ($) {
+				maxPage = this.parseMaxPage($);
+			} else {
+				try {
+					console.log("代理");
+					let html = await RequestStatic.get(
+						this.getAgreement() + this.getUrl(),
+						this.getCharset(),
+						proxy
+					);
+					maxPage = this.parseMaxPage(cheerio.load(html));
+				} catch (error) {
+					console.error(error);
+				}
+			}
+			return maxPage;
 		}
-		return maxPage;
 	}
 
 	nextPage() {
@@ -45,7 +55,7 @@ abstract class PoolBase {
 		if (proxy) {
 			console.log("使用代理:", proxy, "获取:", this.getAgreement() + this.getUrl());
 		} else {
-			console.log("获取:", this.getAgreement() + this.getUrl());
+			console.log("本机获取:", this.getAgreement() + this.getUrl());
 		}
 
 		// try {

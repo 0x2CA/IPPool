@@ -29,25 +29,29 @@ export default class RequestStatic {
 
 	static get(url: string, charset = "utf8", proxy?: string, timeout = 3000): Promise<string> {
 		return new Promise((resolve, reject) => {
-			let userAgent =
-				RequestStatic.userAgents[
-					Math.floor(Math.random() * RequestStatic.userAgents.length)
-				];
-
 			let request = superagent.get(url);
 
-			request = request.set({ "User-Agent": userAgent });
+			//设置伪装头
+			request = request.set({
+				"User-Agent":
+					RequestStatic.userAgents[
+						Math.floor(Math.random() * RequestStatic.userAgents.length)
+					],
+			});
 
-			request.buffer(true);
+			//返回编码设置
+			request = request.buffer(true);
+			request = (<any>request).charset(charset);
 
-			(<any>request).charset(charset);
+			//重试次数
+			request = request.retry(3);
 
 			if (proxy) {
-				(<any>request).proxy(proxy);
+				request = (<any>request).proxy(proxy);
 			}
 
 			if (timeout) {
-				request.timeout(timeout);
+				request = request.timeout(timeout);
 			}
 
 			request.end(function(err, res) {

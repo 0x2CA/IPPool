@@ -64,6 +64,9 @@ export default class IPPoolDB {
 				});
 				console.warn("分数过低清除:", list[0].getID());
 			} else {
+				if (list[0].getSurvive()) {
+					console.log(list[0].getID(), "存活");
+				}
 				await this.getDBManage().updateOne(
 					"IPTable",
 					{

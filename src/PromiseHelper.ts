@@ -18,7 +18,9 @@ export default class PromiseHelper {
 	}
 	static awaitTime(time: number) {
 		return new Promise((resolve, reject) => {
+			console.log(`等待${time}毫秒!`);
 			setTimeout(() => {
+				console.log(`等待结束!`);
 				resolve();
 			}, time);
 		});
