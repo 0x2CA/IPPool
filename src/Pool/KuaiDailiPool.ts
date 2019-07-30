@@ -62,6 +62,10 @@ export default class KuaiDailiPool extends PoolBase {
 			checkTime = info[6];
 		}
 
-		return new IPData(ip, port, type, anonymous, site);
+		if (this.isIP(ip)) {
+			return new IPData(ip, port, type, anonymous, site);
+		} else {
+			throw new Error("无效代理");
+		}
 	}
 }

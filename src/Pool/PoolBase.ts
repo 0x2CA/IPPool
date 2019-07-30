@@ -61,7 +61,12 @@ abstract class PoolBase {
 		let infoList = this.parseHtml(cheerio.load(html));
 		for (let index = 0; index < infoList.length; index++) {
 			const info = infoList[index];
-			list.push(this.getIPData(info));
+			try {
+				let item = this.getIPData(info);
+				list.push(item);
+			} catch (error) {
+				console.error(error);
+			}
 		}
 		return list;
 		// } catch (error) {
@@ -108,6 +113,12 @@ abstract class PoolBase {
 	 * @memberof PoolBase
 	 */
 	abstract getAgreement(): PoolBase.AgreementType;
+
+	protected isIP(ip: string) {
+		return RegExp(
+			/^((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}$/
+		).test(ip);
+	}
 
 	/**
 	 * 获取URL
