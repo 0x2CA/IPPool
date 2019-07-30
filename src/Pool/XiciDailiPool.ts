@@ -3,19 +3,19 @@ import IPData from "./IPData";
 
 export default class XiciDailiPool extends PoolBase {
 	protected parseMaxPage($: CheerioStatic): number {
-		if (this.maxPage > 0) {
+		if (this.maxPage != 0) {
 			return this.maxPage;
 		} else {
 			let max = 0;
 			let list = $("div.pagination [href]").get();
-			if (parseInt($(list[list.length - 2]).text()) > 0) {
-				max = parseInt($(list[list.length - 2]).text());
+			max = parseInt($(list[list.length - 2]).text());
+			if (max > 0) {
 				this.maxPage = max;
 			}
-
 			return max;
 		}
 	}
+
 	getAgreement(): PoolBase.AgreementType {
 		return PoolBase.AgreementType.HTTPS;
 	}

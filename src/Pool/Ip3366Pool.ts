@@ -2,16 +2,14 @@ import PoolBase from "./PoolBase";
 import IPData from "./IPData";
 
 export default class Ip3366Pool extends PoolBase {
-	protected parseMaxPage($?: CheerioStatic): number {
+	protected parseMaxPage($: CheerioStatic): number {
 		if (this.maxPage != 0) {
 			return this.maxPage;
 		} else {
 			let max = 0;
-			if ($) {
-				max = parseInt($("#listnav ul b font").text());
-				if (max > 0) {
-					this.maxPage = max;
-				}
+			max = parseInt($("#listnav ul b font").text());
+			if (max > 0) {
+				this.maxPage = max;
 			}
 			return max;
 		}

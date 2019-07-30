@@ -2,9 +2,19 @@ import PoolBase from "./PoolBase";
 import IPData from "./IPData";
 
 export default class KuaiDailiPool extends PoolBase {
-    protected parseMaxPage($: CheerioStatic): number {
-        throw new Error("Method not implemented.");
-    }
+	protected parseMaxPage($: CheerioStatic): number {
+		if (this.maxPage != 0) {
+			return this.maxPage;
+		} else {
+			let max = 0;
+			let list = $("div#listnav li").get();
+			max = parseInt($(list[list.length - 2]).text());
+			if (max > 0) {
+				this.maxPage = max;
+			}
+			return max;
+		}
+	}
 	getAgreement(): PoolBase.AgreementType {
 		return PoolBase.AgreementType.HTTPS;
 	}

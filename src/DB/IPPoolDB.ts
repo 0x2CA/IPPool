@@ -26,7 +26,7 @@ export default class IPPoolDB {
 		return this.dbManage;
 	}
 
-	async insertIPData(...list: Array<IPData>) {
+	async insertIPDataMany(list: Array<IPData>) {
 		await this.getDBManage().createUniqueIndex("IPTable", "id");
 		let promiseList = new Array<Promise<any>>();
 		for (let index = 0; index < list.length; index++) {

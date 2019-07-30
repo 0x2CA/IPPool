@@ -3,13 +3,14 @@ import PoolManage from "./Pool/PoolManage";
 import IPPoolDB from "./DB/IPPoolDB";
 import IPData from "./Pool/IPData";
 import XiciDailiPool from "./Pool/XiciDailiPool";
+import KuaiDailiPool from "./Pool/KuaiDailiPool";
 
 export default class Application {
 	static async Main(...argv: Array<string>) {
 		let ipPoolDB = new IPPoolDB();
 		await ipPoolDB.connect();
 
-		let pool = await PoolManage.getPool(XiciDailiPool);
+		let pool = await PoolManage.getPool(KuaiDailiPool);
 
 		let proxyList = await ipPoolDB.getIPData({
 			isSurvive: true,
@@ -23,7 +24,7 @@ export default class Application {
 				//使用代理
 				try {
 					let list = await pool.getPageData(proxyList[proxyIndex].getProxy());
-					await ipPoolDB.insertIPData(...list);
+					await ipPoolDB.insertIPDataMany(list);
 				} catch (error) {
 					//使用代理失败，推回和更新代理
 					console.error(error);
@@ -36,7 +37,7 @@ export default class Application {
 				//不使用代理
 				try {
 					let list = await pool.getPageData();
-					await ipPoolDB.insertIPData(...list);
+					await ipPoolDB.insertIPDataMany(list);
 				} catch (error) {
 					//不使用代理失败，退回
 					console.error(error);
