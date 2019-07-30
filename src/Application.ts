@@ -4,6 +4,7 @@ import IPPoolDB from "./DB/IPPoolDB";
 import IPData from "./Pool/IPData";
 import XiciDailiPool from "./Pool/XiciDailiPool";
 import KuaiDailiPool from "./Pool/KuaiDailiPool";
+import PromiseHelper from "./PromiseHelper";
 
 export default class Application {
 	static async Main(...argv: Array<string>) {
@@ -18,8 +19,9 @@ export default class Application {
 		});
 		let proxyIndex = 0;
 
-		for (let index = 1; index <= (await pool.getMaxPage()); index++) {
+		for (let index = 57; index <= (await pool.getMaxPage()); index++) {
 			pool.setPage(index);
+
 			if (proxyList[proxyIndex]) {
 				//使用代理
 				try {
@@ -33,7 +35,7 @@ export default class Application {
 				}
 				//使用过代理
 				proxyIndex++;
-			} else {
+			} else if (proxyList.length == 0) {
 				//不使用代理
 				try {
 					let list = await pool.getPageData();
@@ -49,7 +51,18 @@ export default class Application {
 					agreement: pool.getAgreement(),
 				});
 				proxyIndex = 0;
+			} else {
+				index--;
+				//获取最新代理
+				proxyList = await ipPoolDB.getIPData({
+					isSurvive: true,
+					agreement: pool.getAgreement(),
+				});
+				proxyIndex = 0;
 			}
+			//延迟3秒
+			console.log("延迟3秒");
+			await PromiseHelper.awaitTime(3000);
 		}
 
 		await ipPoolDB.close();
