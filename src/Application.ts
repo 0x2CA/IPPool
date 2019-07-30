@@ -2,13 +2,14 @@ import Ip3366Pool from "./Pool/Ip3366Pool";
 import PoolManage from "./Pool/PoolManage";
 import IPPoolDB from "./DB/IPPoolDB";
 import IPData from "./Pool/IPData";
+import XiciDailiPool from "./Pool/XiciDailiPool";
 
 export default class Application {
 	static async Main(...argv: Array<string>) {
 		let ipPoolDB = new IPPoolDB();
 		await ipPoolDB.connect();
 
-		let pool = await PoolManage.getPool(Ip3366Pool);
+		let pool = await PoolManage.getPool(XiciDailiPool);
 
 		let proxyList = await ipPoolDB.getIPData({
 			isSurvive: true,
